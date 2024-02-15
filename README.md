@@ -37,27 +37,6 @@ La finalidad de BrickPoint es crear una plataforma digital que sirva como un pun
 4. **Integrar Eventos y Reuniones Locales:** Organizar eventos y encuentros locales para que los entusiastas de LEGO puedan interactuar en persona, construyendo una comunidad sólida.
 5. **Ofrecer una Experiencia Adaptativa:** Garantizar que la plataforma sea fácilmente accesible, adaptable y reconocible en diferentes contextos y dispositivos.
 =======
-| Autor | ALejandro Ríos Bermúdez |
-| ----- | ------------------------- |
-| Tutor |                           |
-
-| I.E.S. Francisco Romero Vargas (Jerez de la Frontera) |
-| ----------------------------------------------------- |
-| Desarrollo de Aplicaciones Web                        |
-| Curso: 2023/2024                                      |
-
-## Introducción:
-
-El anteproyecto de BrickPoint tiene como objetivo la creación de un prototipo para una tienda online especializada en la venta de piezas LEGO. Además de la funcionalidad básica de compra, este prototipo incluirá una sección especial donde los usuarios podrán compartir sus creaciones junto con instrucciones detalladas para inspirar a la comunidad.
-
----
-
-## Finalidad:
-
-La finalidad de BrickPoint como prototipo se amplía para explorar la interacción comunitaria mediante la creación y compartición de proyectos. Además de evaluar la experiencia de compra básica, se busca fomentar la creatividad y la colaboración entre los aficionados a LEGO.
-
----
-
 ## Objetivos:
 
 1. **Desarrollar un Prototipo de Plataforma de Compras Online:**
@@ -114,4 +93,3 @@ La finalidad de BrickPoint como prototipo se amplía para explorar la interacci�
 6. Pruebas finales (4h)
 
 Tiempo total estimado: 54 horas
->>>>>>> 90a6120745390bbd4e20ad852e025695d1d87484
