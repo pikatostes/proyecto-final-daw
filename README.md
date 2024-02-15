@@ -33,19 +33,14 @@ La finalidad de BrickPoint es crear una plataforma digital que sirva como un pun
 
 1. **Facilitar la Adquisición de Piezas:** Proporcionar a los usuarios la posibilidad de comprar piezas de LEGO específicas para sus construcciones.
 2. **Fomentar la Creatividad:** Ofrecer un espacio donde los usuarios puedan compartir sus creaciones, ya sean gratuitas o a través de un modelo de pago, promoviendo la creatividad y la innovación.
-3. **Construir una Comunidad Activa:** Establecer un foro dinámico para que los usuarios discutan, colaboren y participen en desafíos y concursos, fortaleciendo los lazos dentro de la comunidad.
-4. **Integrar Eventos y Reuniones Locales:** Organizar eventos y encuentros locales para que los entusiastas de LEGO puedan interactuar en persona, construyendo una comunidad sólida.
-5. **Ofrecer una Experiencia Adaptativa:** Garantizar que la plataforma sea fácilmente accesible, adaptable y reconocible en diferentes contextos y dispositivos.
-=======
-## Objetivos:
-
-1. **Desarrollar un Prototipo de Plataforma de Compras Online:**
+3. **Ofrecer una Experiencia Adaptativa:** Garantizar que la plataforma sea fácilmente accesible, adaptable y reconocible en diferentes contextos y dispositivos.
+4. **Desarrollar un Prototipo de Plataforma de Compras Online:**
    * Crear un entorno web interactivo donde los usuarios puedan explorar productos y simular procesos de compra.
-2. **Implementar un Sistema Básico de Carrito de Compras:**
+5. **Implementar un Sistema Básico de Carrito de Compras:**
    * Diseñar y ejecutar un sistema de carrito de compras simplificado para evaluar la experiencia de usuario.
-3. **Gestión de Usuarios y Sesiones:**
+6. **Gestión de Usuarios y Sesiones:**
    * Establecer un sistema de gestión de usuarios con funcionalidades básicas de registro, inicio de sesión y perfiles.
-4. **Sección de Creaciones y Compartición:**
+7. **Sección de Creaciones y Compartición:**
    * Introducir una sección donde los usuarios puedan subir imágenes de sus creaciones LEGO y proporcionar instrucciones detalladas.
 
 ---
