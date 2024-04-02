@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Piece index{% endblock %}
+
+{% block body %}
+    <h1>Piece index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for piece in pieces %}
+            <tr>
+                <td>{{ piece.id }}</td>
+                <td>{{ piece.name }}</td>
+                <td>{{ piece.price }}</td>
+                <td>{{ piece.stock }}</td>
+                <td>{{ piece.description }}</td>
+                <td>{{ piece.image }}</td>
+                <td>
+                    <a href="{{ path('app_piece_show', {'id': piece.id}) }}">show</a>
+                    <a href="{{ path('app_piece_edit', {'id': piece.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_piece_new') }}">Create new</a>
+{% endblock %}

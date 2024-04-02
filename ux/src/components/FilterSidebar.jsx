@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Collapse, Form, FormGroup } from "react-bootstrap";
 
-// Componente para un solo checkbox de filtro
 const FilterCheckbox = ({ id, label }) => {
   return <Form.Check type="checkbox" id={id} label={label} />;
 };
 
-// Componente para un grupo de filtros
 const FilterGroup = ({ title, children }) => {
   return (
     <FormGroup>
@@ -16,36 +14,19 @@ const FilterGroup = ({ title, children }) => {
   );
 };
 
-// Componente para el formulario de filtros
-const FilterForm = () => {
+const FilterForm = ({ colors }) => {
   return (
     <Form>
       <FilterGroup title="Filtrar por Color">
-        <FilterCheckbox id="colorRed" label="Rojo" />
-        {/* Agrega más componentes FilterCheckbox para otros colores */}
+        {colors.map((color) => (
+          <FilterCheckbox
+            key={color.id}
+            id={`color${color.id}`}
+            label={color.name}
+          />
+        ))}
       </FilterGroup>
-      <FilterGroup title="Filtrar por Categoría">
-        <FilterCheckbox id="categoryTechnic" label="Technic" />
-        {/* Agrega más componentes FilterCheckbox para otras categorías */}
-      </FilterGroup>
-      <FilterGroup title="Filtrar por Temática">
-        <FilterCheckbox id="themeSpace" label="Space" />
-        {/* Agrega más componentes FilterCheckbox para otras temáticas */}
-      </FilterGroup>
-      <FormGroup>
-        <h4>Filtrar por Precio</h4>
-        <Form.Control
-          type="number"
-          id="minPriceFilter"
-          placeholder="Precio mínimo"
-        />
-        <Form.Control
-          type="number"
-          id="maxPriceFilter"
-          placeholder="Precio máximo"
-          className="mt-2"
-        />
-      </FormGroup>
+      {/* Agrega otros grupos de filtros aquí */}
       <Button variant="danger" id="clearFiltersBtn">
         Eliminar filtros
       </Button>
@@ -53,8 +34,26 @@ const FilterForm = () => {
   );
 };
 
-// Componente para la barra lateral de filtros
-const FilterSidebar = () => {
+const FilterSidebar = ({ apiUrl }) => {
+  const [colors, setColors] = useState([]);
+
+  useEffect(() => {
+    const fetchColors = async () => {
+      try {
+        const response = await fetch(apiUrl); // Usar la prop apiUrl aquí
+        if (!response.ok) {
+          throw new Error("Error al obtener los colores");
+        }
+        const data = await response.json();
+        setColors(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchColors();
+  }, [apiUrl]);
+
   return (
     <aside className="col-lg-3">
       <div className="aside">
@@ -68,7 +67,7 @@ const FilterSidebar = () => {
           Filtrar
         </Button>
         <Collapse id="filtersCollapse">
-          <FilterForm />
+          <FilterForm colors={colors} />
         </Collapse>
       </div>
     </aside>

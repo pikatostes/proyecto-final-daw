@@ -6,9 +6,9 @@ const Pieces = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <FilterSidebar />
+        <FilterSidebar apiUrl="http://localhost:8000/color/"/>
         <main className="col-lg-9">
-          <Iventory api_key="487dbb0c4b8e6b08620d28b3b752a794" limit={200} />
+          <Iventory api_url="http://localhost:8000/piece/" limit={10} />
         </main>
       </div>
     </div>

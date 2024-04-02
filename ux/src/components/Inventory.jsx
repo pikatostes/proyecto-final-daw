@@ -1,45 +1,46 @@
 import React, { useEffect, useState } from "react";
 
-const Iventory = ({ api_key, limit }) => {
-  const [inventoryParts, setInventoryParts] = useState([]);
+const Inventory = ({ api_url, limit }) => {
+  const [inventoryPieces, setInventoryPieces] = useState([]);
 
   useEffect(() => {
-    const fetchInventoryParts = async () => {
+    const fetchInventoryPieces = async () => {
       try {
-        const response = await fetch(
-          `https://rebrickable.com/api/v3/lego/parts/?key=${api_key}&ordering=-quantity`
-        );
+        const response = await fetch(api_url);
         if (!response.ok) {
           throw new Error("Error al obtener los datos");
         }
         const data = await response.json();
-        const parts = data.results.slice(0, limit);
-        setInventoryParts(parts);
+        const pieces = data.slice(0, limit);
+        setInventoryPieces(pieces);
       } catch (error) {
         console.error("Error:", error);
       }
     };
 
-    fetchInventoryParts();
-  }, [api_key, limit]);
+    fetchInventoryPieces();
+  }, [api_url, limit]);
 
-  if (inventoryParts.length === 0) {
+  if (inventoryPieces.length === 0) {
     return <p>No se encontraron piezas de inventario de Lego.</p>;
   }
 
   return (
     <div className="row">
-      {inventoryParts.map((part) => (
-        <div key={part.part_num} className="col-md-3 col-4 mb-4">
+      {inventoryPieces.map((piece) => (
+        <div key={piece.id} className="col-md-3 col-4 mb-4">
           <div className="card" style={{ minHeight: "400px" }}>
             <img
-              src={part.part_img_url}
+              src={piece.image}
               className="card-img-top"
-              alt={part.name}
+              alt={piece.name}
+              style={{ height: "200px", objectFit: "cover" }}
             />
             <div className="card-body">
-              <h5 className="card-title">{part.name}</h5>
-              <p>Colores: {part.colors ? part.colors.join(", ") : "N/A"}</p>
+              <h5 className="card-title">{piece.name}</h5>
+              <p>Precio: ${piece.price}</p>
+              <p>Stock: {piece.stock}</p>
+              <p>Descripción: {piece.description}</p>
               <button className="btn btn-primary">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -61,4 +62,4 @@ const Iventory = ({ api_key, limit }) => {
   );
 };
 
-export default Iventory;
+export default Inventory;
