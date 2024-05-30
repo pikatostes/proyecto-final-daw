@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Container, Form, Button, Row, Col, Card, FloatingLabel, InputGroup, Image } from "react-bootstrap";
-import { Envelope, Person, Lock, Eye, EyeSlash } from 'react-bootstrap-icons';
+import React, { useState } from "react";
+import { Container, Form, Button, Row, Col, Card, FloatingLabel, InputGroup } from "react-bootstrap";
+import { Envelope, Person, Lock, CheckCircle, Eye, EyeSlash } from 'react-bootstrap-icons';
 import { registerUser, loginUser, saveUserSession } from "./userUtils";
 import './css/Register.css'; // Archivo CSS para estilos personalizados
 
@@ -18,22 +18,6 @@ const Register = () => {
   const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [images, setImages] = useState({});
-
-  useEffect(() => {
-    // Fetch images from localhost:8000
-    const fetchImages = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/images");
-        const data = await response.json();
-        setImages(data);
-      } catch (error) {
-        console.error("Error fetching images:", error);
-      }
-    };
-
-    fetchImages();
-  }, []);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -63,13 +47,6 @@ const Register = () => {
     setPasswordValid(errors.length === 0);
   };
 
-  const handleImageClick = (imageName) => {
-    setFormData({
-      ...formData,
-      avatar: imageName,
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -82,11 +59,7 @@ const Register = () => {
       formDataToSend.append("email", formData.email);
       formDataToSend.append("username", formData.username);
       formDataToSend.append("password", formData.password);
-      if (formData.avatar instanceof File) {
-        formDataToSend.append("avatar", formData.avatar);
-      } else {
-        formDataToSend.append("avatarUrl", `http://localhost:8000/images/${formData.avatar}`);
-      }
+      formDataToSend.append("avatar", formData.avatar);
 
       await registerUser(formDataToSend);
 
@@ -156,6 +129,7 @@ const Register = () => {
                   <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
                     {showPassword ? <EyeSlash /> : <Eye />}
                   </Button>
+
                 </InputGroup>
 
                 <InputGroup className="mb-3">
@@ -197,25 +171,6 @@ const Register = () => {
                     onChange={handleChange}
                   />
                 </Form.Group>
-
-                <Form.Group controlId="avatarSelection" className="mb-3">
-                  <Form.Label>Select an Avatar from gallery</Form.Label>
-                  <Container className="d-flex flex-wrap" fluid style={{ maxHeight: "35vh", overflowX: "auto" }}>
-                    {Object.entries(images).map(([key, imageName]) => (
-                      <Image
-                        key={key}
-                        roundedCircle
-                        src={`http://localhost:8000/images/${imageName}`}
-                        onClick={() => handleImageClick(imageName)}
-                        style={{ cursor: "pointer" }}
-                        width={63}
-                        fluid
-                        className="m-1"
-                      />
-                    ))}
-                  </Container>
-                </Form.Group>
-
                 <Button variant="primary" type="submit">
                   Submit
                 </Button>
