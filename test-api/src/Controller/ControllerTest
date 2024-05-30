@@ -1,0 +1,59 @@
+<?php
+
+// namespace App\Controller;
+
+// use App\Entity\Piece;
+// use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// use Symfony\Component\HttpFoundation\JsonResponse;
+// use Symfony\Component\HttpFoundation\Request;
+// use Symfony\Component\Routing\Annotation\Route;
+// use Doctrine\ORM\EntityManagerInterface;
+
+// class PieceController extends AbstractController
+// {
+//     private EntityManagerInterface $entityManager;
+
+//     public function __construct(EntityManagerInterface $entityManager)
+//     {
+//         $this->entityManager = $entityManager;
+//     }
+
+//     #[Route('/piece', name: 'app_piece')]
+//     public function index(Request $request): JsonResponse
+//     {
+//         // Obtener los valores de color como un array
+//         $colors = $request->query->all()['color'] ?? [];
+
+//         $queryBuilder = $this->entityManager->getRepository(Piece::class)->createQueryBuilder('p')
+//             ->leftJoin('p.pieceDetails', 'pd')
+//             ->addSelect('pd');
+
+//         // Aplicar filtros si se han proporcionado
+//         if (!empty($colors)) {
+//             $queryBuilder->leftJoin('pd.color', 'c');
+//             $queryBuilder->andWhere('c.name IN (:colors)')
+//                 ->setParameter('colors', $colors);
+//         }
+
+//         $pieces = $queryBuilder->getQuery()->getResult();
+
+//         $data = [];
+//         foreach ($pieces as $piece) {
+//             $colors = [];
+//             foreach ($piece->getPieceDetails() as $pieceDetail) {
+//                 $colors[] = $pieceDetail->getColor()->getName();
+//             }
+
+//             $data[] = [
+//                 'id' => $piece->getId(),
+//                 'name' => $piece->getName(),
+//                 'description' => $piece->getDescription(),
+//                 'category' => $piece->getCategory() ? $piece->getCategory()->getName() : null,
+//                 'colors' => $colors,
+//                 // Puedes agregar más campos si los necesitas
+//             ];
+//         }
+
+//         return $this->json($data);
+//     }
+// }

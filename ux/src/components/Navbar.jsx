@@ -1,33 +1,109 @@
-import React from "react";
-import { Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
-import { NavLink } from "react-router-dom"; // Importa NavLink desde react-router-dom
+// eslint-disable-next-line no-unused-vars
+import React, { useState, useEffect } from "react";
+import {
+  Navbar,
+  Nav,
+  Button,
+  Container,
+  Dropdown,
+  Image,
+} from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import logo from "../../brickpoint-icon.png"; // Ruta de tu logo
+import Cart from "./Cart"; // Importa el componente Cart
+import { fetchUserDataUsingToken, logoutUser } from "../pages/userUtils"; // Correctly import the function
+import { Cart2, Person } from "react-bootstrap-icons";
 
-const CustomNavbar = () => {
+const NavigationBar = () => {
+  const [showCart, setShowCart] = useState(false); // Estado para controlar si se muestra el carrito
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    try {
+      const data = fetchUserDataUsingToken();
+      setUserData(data);
+    } catch (error) {
+      setError(error.message);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    logoutUser();
+    window.location.reload();
+  };
+
   return (
-    <Navbar bg="dark" expand="lg" variant="dark" fixed="top">
-      <Navbar.Brand href="/">Brickpoint</Navbar.Brand> {/* Cambia el enlace a / */}
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-          <NavDropdown title="Piezas" id="piecesDropdown">
-            <NavDropdown.Item as={NavLink} to="/pieces">Browse</NavDropdown.Item> {/* Cambia el enlace a /pieces */}
-            <NavDropdown.Item href="#categoria2">Categoría 2</NavDropdown.Item>
-            <NavDropdown.Item href="#categoria3">Categoría 3</NavDropdown.Item>
-          </NavDropdown>
-          <NavDropdown title="Foro" id="forumDropdown">
-            <NavDropdown.Item href="#categoria1">Categoría 1</NavDropdown.Item>
-            <NavDropdown.Item href="#categoria2">Categoría 2</NavDropdown.Item>
-            <NavDropdown.Item href="#categoria3">Categoría 3</NavDropdown.Item>
-          </NavDropdown>
-        </Nav>
-        <Nav className="mx-auto">
-          <Button variant="outline-primary" className="mr-2">Log In</Button>
-          <Button variant="primary">Register</Button>
-        </Nav>
-        <div className="ml-auto"></div>
-      </Navbar.Collapse>
-    </Navbar>
+    <>
+      <Navbar bg="" expand="lg" className="bg-dark navbar-dark fixed-top">
+        <Container fluid>
+          <Navbar.Brand href="#">
+            <img
+              src={logo}
+              width="30"
+              height="30"
+              className="d-inline-block align-top"
+              alt="Brickpoint Logo"
+            />
+            {" Brickpoint"}
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto mb-2 mb-lg-0">
+              <Nav.Link href="/">Inicio</Nav.Link>
+              <Nav.Link href="/pieces">Tienda</Nav.Link>
+              <Nav.Link href="/post">Foro</Nav.Link>
+              {/* Añade más enlaces según sea necesario */}
+            </Nav>
+            {userData ? (
+              <Dropdown data-bs-theme="dark">
+                <Dropdown.Toggle variant="primary" className="ms-lg-2">
+                  <Image src={userData.avatar} roundedCircle height={25} />{" "}
+                  {userData.user}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="/profile">
+                    <Person /> Profile
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => setShowCart(!showCart)}>
+                    <Cart2 /> Cart
+                  </Dropdown.Item>
+                  {userData.roles.includes("ROLE_ADMIN") && (
+                    <Dropdown.Item href="/admin">Control Panel</Dropdown.Item>
+                  )}
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={handleLogout}>
+                    <Button
+                      variant="danger"
+                      className="ms-lg-2"
+                      onClick={handleLogout}
+                    >
+                      Log Out
+                    </Button>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            ) : (
+              <>
+                <a href="/login">
+                  <Button variant="primary" className="ms-lg-2">
+                    Log In
+                  </Button>
+                </a>
+                <a href="/register">
+                  <Button variant="success" className="ms-lg-2">
+                    Register
+                  </Button>
+                </a>
+              </>
+            )}
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      {/* Renderiza el componente Cart con el estado showCart */}
+      <Cart show={showCart} setShowCart={setShowCart} />
+    </>
   );
 };
 
-export default CustomNavbar;
+export default NavigationBar;

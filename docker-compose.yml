@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  # Servicio para el frontend de React
+  ux:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+
+  # Servicio para la API de Symfony
+  test-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "mysql://user:password@db:3306/database_name"
+
+  # Servicio para la base de datos MySQL
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: database_name
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:

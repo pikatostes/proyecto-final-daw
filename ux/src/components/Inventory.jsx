@@ -1,63 +1,80 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Card, Button, Row, Col } from "react-bootstrap";
+import ColorCarousel from "./ColorCarousel";
+import PieceOptions from "./PieceOptions";
 
-const Inventory = ({ api_url, limit }) => {
-  const [inventoryPieces, setInventoryPieces] = useState([]);
+const Inventory = ({ inventoryData, limit, filteredColors = [] }) => {
+  const [selectedPieceData, setSelectedPieceData] = React.useState(null);
 
-  useEffect(() => {
-    const fetchInventoryPieces = async () => {
-      try {
-        const response = await fetch(api_url);
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos");
-        }
-        const data = await response.json();
-        const pieces = data.slice(0, limit);
-        setInventoryPieces(pieces);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+  const handleAddToCart = (pieceData) => {
+    setSelectedPieceData(pieceData);
+    window.location.reload();
+  };
 
-    fetchInventoryPieces();
-  }, [api_url, limit]);
-
-  if (inventoryPieces.length === 0) {
+  if (!inventoryData) {
     return <p>No se encontraron piezas de inventario de Lego.</p>;
   }
 
+  let pieces = inventoryData.slice(0, limit);
+  if (filteredColors.length > 0) {
+    pieces = pieces.filter((piece) => filteredColors.includes(piece.color_id));
+  }
+
+  if (pieces.length === 0) {
+    return (
+      <p>
+        No se encontraron piezas que coincidan con los filtros seleccionados.
+      </p>
+    );
+  }
+
   return (
-    <div className="row">
-      {inventoryPieces.map((piece) => (
-        <div key={piece.id} className="col-md-3 col-4 mb-4">
-          <div className="card" style={{ minHeight: "400px" }}>
-            <img
-              src={piece.image}
-              className="card-img-top"
-              alt={piece.name}
-              style={{ height: "200px", objectFit: "cover" }}
-            />
-            <div className="card-body">
-              <h5 className="card-title">{piece.name}</h5>
-              <p>Precio: ${piece.price}</p>
-              <p>Stock: {piece.stock}</p>
-              <p>Descripción: {piece.description}</p>
-              <button className="btn btn-primary">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-cart"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
-                </svg>{" "}
-                Añadir al carrito
-              </button>
-            </div>
-          </div>
-        </div>
-      ))}
+    <div style={{ position: "relative" }}>
+      <Row>
+        {pieces.map((piece) => (
+          <Col key={piece.id} xs={6} sm={6} md={3} lg={2} className="mb-4">
+            <Card style={{ minHeight: "" }}>
+              <Row>
+                <Col xs={12} md={12}>
+                  <ColorCarousel colors={piece.colors} />
+                </Col>
+                <Col xs={12} md={12}>
+                  <Card.Body>
+                    <Row>
+                      <Col xs={12} xl={6}>
+                        <Card.Title>{piece.name}</Card.Title>
+                      </Col>
+                      <Col xs={12} xl={6}>
+                        <Button
+                          variant="primary"
+                          onClick={() => setSelectedPieceData(piece)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            className="bi bi-cart"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                          </svg>
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card.Body>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+      {selectedPieceData && (
+        <PieceOptions
+          pieceData={selectedPieceData}
+          onClose={() => setSelectedPieceData(null)}
+        />
+      )}
     </div>
   );
 };
