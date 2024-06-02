@@ -24,17 +24,18 @@ class RegisterController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        // Obtener los datos de la solicitud, incluido el archivo de la imagen
+        // Obtener los datos de la solicitud, incluido el archivo de la imagen o la URL del avatar
         $email = $request->request->get('email');
         $username = $request->request->get('username');
         $password = $request->request->get('password');
         $avatar = $request->files->get('avatar');
+        $avatarUrl = $request->request->get('avatarUrl');
 
         // Verificar si se proporcionaron los campos de usuario y contraseña
-        if (!$username || !$password || !$avatar || !$email) { // Añadir verificación de avatar
-            return new Response('Email, username, password, and avatar are required', Response::HTTP_BAD_REQUEST);
+        if (!$email || !$username || !$password || (!$avatar && !$avatarUrl)) {
+            return new Response('Email, username, password, and avatar or avatarUrl are required', Response::HTTP_BAD_REQUEST);
         }
 
         // Comprobación si el usuario ya existe en la base de datos
@@ -43,7 +44,6 @@ class RegisterController extends AbstractController
 
         if ($existingUser) {
             // El usuario ya existe
-            // Puedes devolver alguna respuesta apropiada, por ejemplo, un error
             return new Response('User already exists', Response::HTTP_CONFLICT);
         }
 
@@ -53,16 +53,26 @@ class RegisterController extends AbstractController
         $newUser->setUsername($username);
 
         // Hashear la contraseña utilizando UserPasswordHasherInterface
-        $hashedPassword = $this->passwordHasher->hashPassword($newUser, $password);
+        $hashedPassword = $passwordHasher->hashPassword($newUser, $password);
         $newUser->setPassword($hashedPassword);
 
         // Convertir la imagen a base64
-        $avatarBase64 = base64_encode(file_get_contents($avatar->getPathname())); // Obtener la ruta del archivo de avatar
-        $avatarImage = 'data:' . $avatar->getClientMimeType() . ';base64,' . $avatarBase64; // Obtener el tipo MIME del avatar
+        if ($avatar) {
+            $avatarBase64 = base64_encode(file_get_contents($avatar->getPathname()));
+            $avatarImage = 'data:' . $avatar->getClientMimeType() . ';base64,' . $avatarBase64;
+        } else {
+            // Descargar la imagen desde la URL y convertirla a base64
+            $imageContent = file_get_contents($avatarUrl);
+            $imageMimeType = getimagesizefromstring($imageContent)['mime'];
+            $avatarBase64 = base64_encode($imageContent);
+            $avatarImage = 'data:' . $imageMimeType . ';base64,' . $avatarBase64;
+        }
+
         $newUser->setAvatar($avatarImage);
 
-        // Asignar el rol ROLE_ADMIN
-        $newUser->setRoles(['ROLE_USER']); // Aquí asignamos el rol
+        // Asignar el rol ROLE_USER
+        $newUser->setRoles(['ROLE_USER']);
+        $newUser->setAuthenticated(false);
 
         // Guardar el nuevo usuario en la base de datos
         $entityManager->persist($newUser);

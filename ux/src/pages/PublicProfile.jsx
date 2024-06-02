@@ -4,12 +4,11 @@ import {
   Container,
   Row,
   Col,
-  Image,
   Spinner,
   Alert,
-  Tabs,
-  Tab,
   Nav,
+  Card,
+  Tab,
 } from "react-bootstrap";
 import PostCategory from "../components/PostCategory";
 import PostsList from "../components/PostsList";
@@ -21,6 +20,8 @@ const PublicProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [activeTab, setActiveTab] = useState("posts");
+
   const userSession = localStorage.getItem("userData");
 
   const handleSelectCategory = (category) => {
@@ -52,76 +53,63 @@ const PublicProfile = () => {
   if (error) return <Alert variant="danger">{error}</Alert>;
 
   return (
-    <Container>
-      <Tabs
-        defaultActiveKey="profile"
-        id="fill-tab-example"
-        className="mb-3"
-        justify
-        data-bs-theme="dark"
-      >
-        <Tab eventKey="profile" title="Profile">
-          <Tab.Container id="profile-tabs" defaultActiveKey="profile">
-            <Row>
-              <Col sm={2}>
-                <Nav
-                  justify
-                  variant="pills"
-                  className="flex-md-column flex-sm-row mb-3"
+    <Container data-bs-theme="dark">
+      <Row>
+        <Col xs={3}>
+          <UserDetailPublic userData={userData} />
+        </Col>
+        <Col xs={9}>
+          <Card>
+            <Card.Header>
+              <Nav
+                variant="pills"
+                activeKey={activeTab}
+                onSelect={(tab) => setActiveTab(tab)}
+              >
+                <Nav.Item>
+                  <Nav.Link eventKey="posts">Posts</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="likes">Likes</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="categories">Categories</Nav.Link>
+                </Nav.Item>
+              </Nav>
+            </Card.Header>
+            <Card.Body>
+              <Tab.Content>
+                <Tab.Pane eventKey="posts" active={activeTab === "posts"}>
+                  <PostCategory
+                    apiUrl={"http://localhost:8000/user/posts/categories"}
+                    userId={userData.id}
+                    onSelectCategory={handleSelectCategory}
+                  />
+                  <PostsList
+                    apiUrl={`http://localhost:8000/user/${userData.id}/posts`}
+                    category={selectedCategory}
+                  />
+                </Tab.Pane>
+                <Tab.Pane eventKey="likes" active={activeTab === "likes"}>
+                  <PostsList
+                    apiUrl={`http://localhost:8000/user/${userData.id}/likes`}
+                  />
+                </Tab.Pane>
+                <Tab.Pane
+                  eventKey="categories"
+                  active={activeTab === "categories"}
                 >
-                  <Nav.Item>
-                    <Nav.Link eventKey="profile">My Info</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="billingInfo">Billing Info</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="orders">Orders</Nav.Link>
-                  </Nav.Item>
-                </Nav>
-              </Col>
-              <Col sm={10}>
-                <Tab.Content>
-                  <Tab.Pane eventKey="profile">
-                    <UserDetailPublic userData={userData} />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="billingInfo"></Tab.Pane>
-                  <Tab.Pane eventKey="orders"></Tab.Pane>
-                </Tab.Content>
-              </Col>
-            </Row>
-          </Tab.Container>
-        </Tab>
-        <Tab eventKey="Posts" title="Posts">
-          <Tab.Container id="post-tabs" defaultActiveKey="">
-            <Row>
-              <Col sm={2}>
-                <PostCategory
-                  apiUrl={"http://localhost:8000/user/posts/categories"}
-                  userId={userData.id}
-                  onSelectCategory={handleSelectCategory}
-                />
-              </Col>
-              <Col sm={10}>
-                <Tab.Content>
-                  <Tab.Pane eventKey={selectedCategory}>
-                    <PostsList
-                      apiUrl={`http://localhost:8000/user/${userData.id}/posts`}
-                      category={selectedCategory}
-                    />
-                  </Tab.Pane>
-                </Tab.Content>
-              </Col>
-            </Row>
-          </Tab.Container>
-        </Tab>
-        <Tab eventKey="likes" title="Likes">
-          <PostsList
-            apiUrl={`http://localhost:8000/user/${userData.id}/likes`}
-          />
-        </Tab>
-        <Tab eventKey="comments" title="Comments"></Tab>
-      </Tabs>
+                  <PostCategory
+                    apiUrl={"http://localhost:8000/user/posts/categories"}
+                    userId={userData.id}
+                    onSelectCategory={handleSelectCategory}
+                  />
+                </Tab.Pane>
+              </Tab.Content>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 };
