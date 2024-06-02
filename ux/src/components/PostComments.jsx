@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import { fetchComments, deleteComment } from "./commentUtils";
 import ThreePointsButton from "./ThreePointsButton";
 import EditCommentForm from "./EditCommentForm";
 import ReportForm from "./ReportForm";
 
-const PostComments = ({ postId }) => {
-  const [comments, setComments] = useState([]);
+const PostComments = ({ post, comments, setComments }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingComment, setEditingComment] = useState(null);
   const [reportingComment, setReportingComment] = useState(null);
 
   useEffect(() => {
-    fetchComments(postId, setComments, setLoading);
-  }, [postId]);
+    if (comments.length === 0) {
+      fetchComments(post.id, setComments, setLoading);
+    } else {
+      setLoading(false);
+    }
+  }, [comments, post.id, setComments]);
 
   const handleDeleteComment = (commentId) => {
     deleteComment(commentId, () => window.location.reload());

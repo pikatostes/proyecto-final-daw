@@ -66,6 +66,8 @@ class UserController extends AbstractController
             'id' => $user->getId(),
             'username' => $user->getUsername(),
             'avatar' => $user->getAvatar(),
+            'email' => $user->getEmail(),
+            'role' => $user->getRoles(),
         ];
 
         // Devolver la respuesta JSON con los datos del usuario

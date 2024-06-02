@@ -84,17 +84,17 @@ class RegisterController extends AbstractController
         return new Response('User registration successful', Response::HTTP_OK);
     }
 
-    private function sendEmail(string $emailAddress, string $username, string $avatar): void
+    private function sendEmail(string $emailAddress, string $username, string $avatarImage): void
     {
         $email = (new Email())
             ->from('brickpoint.daw@gmail.com')
             ->to($emailAddress)
             ->subject('Bienvenido a BrickPoint')
             ->html($this->renderView('email/welcome.html.twig', [
-                'title' => 'Welcome to BrickPoint!',
+                'title' => '¡Bienvenido, ' . $username . '!',
                 'message' => 'This is a test email sent from Symfony Mailer using Gmail.',
                 'username' => $username,
-                'userAvatar' => $avatar
+                'userAvatar' => $avatarImage
             ]));
 
         $this->mailerInterface->send($email);

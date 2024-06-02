@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Row, Col, Card, FloatingLabel, InputGroup, Image } from "react-bootstrap";
-import { Envelope, Person, Lock, Eye, EyeSlash } from 'react-bootstrap-icons';
+import { Envelope, Person, Lock, Eye, EyeSlash, CheckCircle } from 'react-bootstrap-icons';
 import { registerUser, loginUser, saveUserSession } from "./userUtils";
 import './css/Register.css'; // Archivo CSS para estilos personalizados
 
@@ -18,7 +18,8 @@ const Register = () => {
   const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [images, setImages] = useState({});
+  const [images, setImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     // Fetch images from localhost:8000
@@ -68,6 +69,7 @@ const Register = () => {
       ...formData,
       avatar: imageName,
     });
+    setSelectedImage(imageName);
   };
 
   const handleSubmit = async (e) => {
@@ -202,16 +204,23 @@ const Register = () => {
                   <Form.Label>Select an Avatar from gallery</Form.Label>
                   <Container className="d-flex flex-wrap" fluid style={{ maxHeight: "35vh", overflowX: "auto" }}>
                     {Object.entries(images).map(([key, imageName]) => (
-                      <Image
-                        key={key}
-                        roundedCircle
-                        src={`http://localhost:8000/images/${imageName}`}
-                        onClick={() => handleImageClick(imageName)}
-                        style={{ cursor: "pointer" }}
-                        width={63}
-                        fluid
-                        className="m-1"
-                      />
+                      <div key={key} className="position-relative m-1">
+                        <Image
+                          roundedCircle
+                          src={`http://localhost:8000/images/${imageName}`}
+                          onClick={() => handleImageClick(imageName)}
+                          style={{ cursor: "pointer", opacity: selectedImage === imageName ? 0.5 : 1 }}
+                          width={63}
+                          fluid
+                          className="image-gallery"
+                        />
+                        {selectedImage === imageName && (
+                          <CheckCircle
+                            className="position-absolute top-50 start-50 translate-middle"
+                            style={{ color: "green", fontSize: "1.5rem" }}
+                          />
+                        )}
+                      </div>
                     ))}
                   </Container>
                 </Form.Group>

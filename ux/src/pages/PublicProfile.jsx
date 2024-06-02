@@ -55,16 +55,18 @@ const PublicProfile = () => {
   return (
     <Container data-bs-theme="dark">
       <Row>
-        <Col xs={3}>
+        <Col xs={12} md={3} className="mb-2">
           <UserDetailPublic userData={userData} />
         </Col>
-        <Col xs={9}>
-          <Card>
+        <Col xs={12} md={9}>
+          <Card className="mb-2">
             <Card.Header>
               <Nav
                 variant="pills"
                 activeKey={activeTab}
                 onSelect={(tab) => setActiveTab(tab)}
+                className="justify-content-center"
+                justify
               >
                 <Nav.Item>
                   <Nav.Link eventKey="posts">Posts</Nav.Link>
@@ -72,37 +74,30 @@ const PublicProfile = () => {
                 <Nav.Item>
                   <Nav.Link eventKey="likes">Likes</Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="categories">Categories</Nav.Link>
-                </Nav.Item>
               </Nav>
             </Card.Header>
             <Card.Body>
               <Tab.Content>
                 <Tab.Pane eventKey="posts" active={activeTab === "posts"}>
-                  <PostCategory
-                    apiUrl={"http://localhost:8000/user/posts/categories"}
-                    userId={userData.id}
-                    onSelectCategory={handleSelectCategory}
-                  />
-                  <PostsList
-                    apiUrl={`http://localhost:8000/user/${userData.id}/posts`}
-                    category={selectedCategory}
-                  />
+                  <Row>
+                    <Col xs={12} md={3}>
+                      <PostCategory
+                        apiUrl={"http://localhost:8000/user/posts/categories"}
+                        userId={userData.id}
+                        onSelectCategory={handleSelectCategory}
+                      />
+                    </Col>
+                    <Col xs={12} md={9}>
+                      <PostsList
+                        apiUrl={`http://localhost:8000/user/${userData.id}/posts`}
+                        category={selectedCategory}
+                      />
+                    </Col>
+                  </Row>
                 </Tab.Pane>
                 <Tab.Pane eventKey="likes" active={activeTab === "likes"}>
                   <PostsList
                     apiUrl={`http://localhost:8000/user/${userData.id}/likes`}
-                  />
-                </Tab.Pane>
-                <Tab.Pane
-                  eventKey="categories"
-                  active={activeTab === "categories"}
-                >
-                  <PostCategory
-                    apiUrl={"http://localhost:8000/user/posts/categories"}
-                    userId={userData.id}
-                    onSelectCategory={handleSelectCategory}
                   />
                 </Tab.Pane>
               </Tab.Content>

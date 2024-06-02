@@ -12,7 +12,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../brickpoint-icon.png"; // Ruta de tu logo
 import Cart from "./Cart"; // Importa el componente Cart
 import { fetchUserDataUsingToken, logoutUser } from "../pages/userUtils"; // Correctly import the function
-import { Cart2, Person } from "react-bootstrap-icons";
+import { Cart2, Person, PersonGear } from "react-bootstrap-icons";
 
 const NavigationBar = () => {
   const [showCart, setShowCart] = useState(false); // Estado para controlar si se muestra el carrito
@@ -69,7 +69,7 @@ const NavigationBar = () => {
                     <Cart2 /> Cart
                   </Dropdown.Item>
                   {userData.roles.includes("ROLE_ADMIN") && (
-                    <Dropdown.Item href="/admin">Control Panel</Dropdown.Item>
+                    <Dropdown.Item href="/admin"><PersonGear /> Control Panel</Dropdown.Item>
                   )}
                   <Dropdown.Divider />
                   <Dropdown.Item onClick={handleLogout}>

@@ -12,8 +12,8 @@ import Error404 from "./pages/Error404";
 import Error403 from "./pages/Error403";
 import Admin from "./pages/Admin";
 import Payment from "./pages/Payment";
-import PostIndex from "./pages/PostIndex";
 import PublicProfile from "./pages/PublicProfile";
+import CategoryIndex from "./pages/CategoryIndex";
 
 const App = () => {
   return (
@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/pieces" element={<Pieces />} />
         <Route path="/post" element={<Posts />} />
-        <Route path="/creations/index" element={<PostIndex />} />
+        <Route path="/creations/index" element={<CategoryIndex />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<PrivateProfile />} />
