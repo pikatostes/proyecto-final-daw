@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Image, Table, Button } from "react-bootstrap";
+import { Container, Image, Table, Button, Spinner } from "react-bootstrap";
 import UserEditForm from "./UserEditForm";
 
 const UserList = ({ apiUrl }) => {
@@ -39,7 +39,11 @@ const UserList = ({ apiUrl }) => {
   };
 
   if (loading) {
-    return <p>Cargando...</p>;
+    return (
+      <Container fluid className="d-flex justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+        <Spinner animation="border" role="status" />
+      </Container>
+    );
   }
 
   if (error) {
@@ -50,7 +54,7 @@ const UserList = ({ apiUrl }) => {
     <Container fluid>
       <h2>Lista de Usuarios</h2>
       <div className="align-items-center">
-        <Table striped bordered hover>
+        <Table striped bordered hover responsive>
           <thead>
             <tr>
               <th>Username</th>

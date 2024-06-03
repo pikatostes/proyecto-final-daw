@@ -36,16 +36,22 @@ class AdminController extends AbstractController
     public function postList(PostRepository $postRepository): JsonResponse
     {
         $posts = $postRepository->findAll();
+        //count post likes   
 
         $serializedPosts = [];
         foreach ($posts as $post) {
+            $totalLikes = $post->getLikes()->count();
             $serializedPosts[] = [
                 'id' => $post->getId(),
                 'title' => $post->getTitle(),
                 'description' => $post->getDescription(),
                 'created_at' => $post->getCreatedAt()->format('Y-m-d H:i:s'),
                 'updated_at' => $post->getUpdatedAt()->format('Y-m-d H:i:s'),
+                'totalLikes' => $totalLikes,
                 'user_id_id' => $post->getUserId()->getUsername(),
+                'user_id' => $post->getUserId()->getId(),
+                'user' => $post->getUserId()->getUsername(),
+                'avatar' => $post->getUserId()->getAvatar(),
                 'category_id' => $post->getCategory()->getName(),
                 'image' => $post->getImage()
             ];

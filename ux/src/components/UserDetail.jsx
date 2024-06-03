@@ -6,8 +6,8 @@ import { fetchUserData, updateUserDetails } from "./profileUtil";
 const UserDetail = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const UserDetail = () => {
         // Aquí podrías manejar la respuesta, por ejemplo, mostrar un mensaje de éxito
       })
       .catch((error) => {
-        console.error('Error updating user data:', error);
+        console.error("Error updating user data:", error);
       });
   };
 
@@ -53,7 +53,9 @@ const UserDetail = () => {
       <Card.Header>User Profile</Card.Header>
       <Card.Body>
         {loading ? (
-          <Spinner animation="border" />
+          <div className="d-flex justify-content-center align-items-center">
+            <Spinner animation="border" />
+          </div>
         ) : (
           <Row className="align-items-center justify-content-center">
             <Col sm={3} className="text-center">
@@ -78,7 +80,9 @@ const UserDetail = () => {
                 <Form.Label>Change Avatar</Form.Label>
                 <Form.Control type="file" onChange={handleAvatarChange} />
               </Form.Group>
-              <Button variant="primary" onClick={handleSubmit}>Save Changes</Button>
+              <Button variant="primary" onClick={handleSubmit}>
+                Save Changes
+              </Button>
             </Col>
           </Row>
         )}

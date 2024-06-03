@@ -33,8 +33,6 @@ export const saveUserSession = (data) => {
   const userId = data.user_id;
   const userRole = data.user_role;
 
-  console.log(data);
-
   localStorage.setItem("userSession", userSession);
   localStorage.setItem("user_id", userId);
   localStorage.setItem("token", token);

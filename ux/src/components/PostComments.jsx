@@ -41,9 +41,9 @@ const PostComments = ({ post, comments, setComments }) => {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center">
-        <Spinner animation="border" />
-      </div>
+      <Container fluid className="d-flex justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+        <Spinner animation="border" role="status" />
+      </Container>
     );
   }
 

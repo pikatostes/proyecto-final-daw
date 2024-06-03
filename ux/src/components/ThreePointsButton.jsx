@@ -14,8 +14,10 @@ const ThreePointsButton = ({
   onReport,
   userSession,
 }) => {
+  const userData = JSON.parse(localStorage.getItem("userData"));
   return (
     <OverlayTrigger
+      rootClose
       trigger="click"
       placement="left"
       overlay={
@@ -32,7 +34,8 @@ const ThreePointsButton = ({
                 Report
               </p>
             )}
-            {userSession === target.user && (
+            {(userSession === target.user ||
+              userData.roles.includes("ROLE_ADMIN")) && (
               <>
                 <p>
                   <PencilSquare

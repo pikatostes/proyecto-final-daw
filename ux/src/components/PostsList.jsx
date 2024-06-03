@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Row, Col, Image, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import PostDetail from "./PostDetail";
-import {
-  fetchPosts,
-  handleLike,
-  handleDeletePost,
-} from "./postUtils";
+import { fetchPosts, handleLike, handleDeletePost } from "./postUtils";
 import PostForm from "./PostForm";
 import ReportForm from "./ReportForm";
 import ThreePointsButton from "./ThreePointsButton"; // Importar ThreePointsButton

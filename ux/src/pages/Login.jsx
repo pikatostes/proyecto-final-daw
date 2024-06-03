@@ -35,7 +35,7 @@ const Login = () => {
       saveUserSession(data);
 
       // Redirigir al usuario a la página principal
-      // window.location.href = "/";
+      window.location.href = "/";
       setIsLoading(false);
     } catch (error) {
       console.error("Error:", error.message);
