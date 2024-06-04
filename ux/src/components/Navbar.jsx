@@ -12,7 +12,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../brickpoint-icon.png"; // Ruta de tu logo
 import Cart from "./Cart"; // Importa el componente Cart
 import { fetchUserDataUsingToken, logoutUser } from "../pages/userUtils"; // Correctly import the function
-import { Cart2, Person, PersonGear } from "react-bootstrap-icons";
+import { Cart2, House, People, Person, PersonGear, Shop } from "react-bootstrap-icons";
 
 const NavigationBar = () => {
   const [showCart, setShowCart] = useState(false); // Estado para controlar si se muestra el carrito
@@ -50,10 +50,15 @@ const NavigationBar = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto mb-2 mb-lg-0">
-              <Nav.Link href="/">Inicio</Nav.Link>
-              <Nav.Link href="/pieces">Tienda</Nav.Link>
-              <Nav.Link href="/post">Foro</Nav.Link>
-              {/* Añade más enlaces según sea necesario */}
+              <Nav.Link href="/" className="align-self-center">
+                <House /> Home
+              </Nav.Link>
+              <Nav.Link href="/pieces" className="align-self-center">
+                <Shop /> Shop
+              </Nav.Link>
+              <Nav.Link href="/post" className="align-self-center">
+                <People /> Forum
+              </Nav.Link>
             </Nav>
             {userData ? (
               <Dropdown data-bs-theme="dark">
@@ -69,7 +74,9 @@ const NavigationBar = () => {
                     <Cart2 /> Cart
                   </Dropdown.Item>
                   {userData.roles.includes("ROLE_ADMIN") && (
-                    <Dropdown.Item href="/admin"><PersonGear /> Control Panel</Dropdown.Item>
+                    <Dropdown.Item href="/admin">
+                      <PersonGear /> Control Panel
+                    </Dropdown.Item>
                   )}
                   <Dropdown.Divider />
                   <Dropdown.Item onClick={handleLogout}>

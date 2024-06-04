@@ -87,7 +87,11 @@ const PublicProfile = () => {
                         onSelectCategory={handleSelectCategory}
                       />
                     </Col>
-                    <Col xs={12} md={9}>
+                    <Col
+                      xs={12}
+                      md={9}
+                      style={{ maxHeight: "77vh", overflowY: "auto" }}
+                    >
                       <PostsList
                         apiUrl={`http://localhost:8000/user/${userData.id}/posts`}
                         category={selectedCategory}
