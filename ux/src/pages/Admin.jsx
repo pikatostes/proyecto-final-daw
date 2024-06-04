@@ -7,7 +7,7 @@ import PostsList from "../components/PostsList";
 import { PersonGear } from "react-bootstrap-icons";
 
 const Admin = () => {
-  const [activeTab, setActiveTab] = useState("post-reports");
+  const [activeTab, setActiveTab] = useState("users");
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 

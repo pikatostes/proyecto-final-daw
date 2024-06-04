@@ -5,8 +5,6 @@ import Minifigures from "../assets/minifigures.webp";
 import LegoIcon from "../assets/lego-icon.webp";
 
 const Home = () => {
-  const imageSizes = ["800x400", "800x600", "800x500"]; // Ejemplo de tamaños de imágenes
-
   return (
     <Container
       fluid
