@@ -37,13 +37,14 @@ const NavigationBar = () => {
     <>
       <Navbar bg="" expand="lg" className="bg-dark navbar-dark fixed-top">
         <Container fluid>
-          <Navbar.Brand href="#">
-            <img
+          <Navbar.Brand href="/">
+            <Image
               src={logo}
-              width="30"
-              height="30"
+              width={30}
+              height={30}
               className="d-inline-block align-top"
               alt="Brickpoint Logo"
+              fluid
             />
             {" Brickpoint"}
           </Navbar.Brand>

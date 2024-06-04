@@ -1,7 +1,8 @@
 import React from "react";
 import CarouselComponent from "../components/Carousel";
-import { Col, Container, Image, Row } from "react-bootstrap";
+import { Card, Col, Container, Image, Nav, Row } from "react-bootstrap";
 import Minifigures from "../assets/minifigures.webp";
+import LegoIcon from "../assets/lego-icon.webp";
 
 const Home = () => {
   const imageSizes = ["800x400", "800x600", "800x500"]; // Ejemplo de tamaños de imágenes
@@ -9,14 +10,55 @@ const Home = () => {
   return (
     <Container
       fluid
-      className="d-flex flex-column align-items-center"
+      className="d-flex flex-column align-items-center text-center"
       style={{ minHeight: "100vh" }}
+      data-bs-theme="dark"
     >
-      <h1>Welcome to BrickPoint!</h1>
+      <h2>Welcome to BrickPoint!</h2>
+      <h3>
+        Your <Image src={LegoIcon} alt="Lego Icon" rounded height={35} /> pieces
+        shop and forum
+      </h3>
       {/* <CarouselComponent carouselSize="carousel-md" imageSizes={imageSizes} /> */}
       <Row className="align-items-center">
-        <Col>
+        <Col xs={12}>
           <Image src={Minifigures} alt="Minifigures" fluid />
+        </Col>
+        <Col xs={12}>
+          <h3>Best Creations</h3>
+          <Card>
+            <Card.Header>
+              <Nav variant="pills" className="justify-content-center" justify>
+                <Nav.Item>
+                  <Nav.Link eventKey="first">Card Title</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="second">Card Title</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="third">Card Title</Nav.Link>
+                </Nav.Item>
+              </Nav>
+            </Card.Header>
+            <Card.Body>
+              <Row className="align-items-center">
+                <Col xs={12}>
+                  <Image
+                    src="https://via.placeholder.com/300x300"
+                    alt="Placeholder Image"
+                    fluid
+                  />
+                </Col>
+                <Col xs={12}>
+                  <h3>Card Title</h3>
+                  <p>
+                    Some quick example text to build on the card title and make
+                    up the bulk of the card's content.
+                  </p>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>

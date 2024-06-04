@@ -70,15 +70,15 @@ const Posts = () => {
   };
 
   return (
-    <Container>
+    <Container data-bs-theme="dark">
       <Row>
-        <Col lg={2}>
+        <Col xs={12} md={3}>
           <PostCategory
             apiUrl={"http://localhost:8000/post/category"}
             onSelectCategory={handleSelectCategory}
           />
         </Col>
-        <Col lg={10}>
+        <Col xs={12} md={9}>
           <Form>
             <InputGroup className="mb-3">
               <InputGroup.Text>
