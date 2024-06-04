@@ -6,6 +6,7 @@ use App\Entity\CommentReports;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CommentReportsController extends AbstractController
@@ -39,11 +40,14 @@ class CommentReportsController extends AbstractController
         return new JsonResponse($serializedCommentReports);
     }
 
-    #[Route('/comments/reports/{id}', name: 'app_comment_reports_delete', methods: ['DELETE'])]
-    public function deleteCommentReport(CommentReports $commentReport): JsonResponse
+    #[Route('/comment/report/delete', name: 'delete_comment_report', methods: ['DELETE'])]
+    public function deleteCommentReport(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $this->entityManager->remove($commentReport);
-        $this->entityManager->flush();
+        // Obtener el contenido JSON de la solicitud
+        $data = json_decode($request->getContent(), true);
+        $commentReport = $entityManager->getRepository(CommentReports::class)->find($data['id']);
+        $entityManager->remove($commentReport);
+        $entityManager->flush();
         return new JsonResponse(['success' => true]);
     }
 

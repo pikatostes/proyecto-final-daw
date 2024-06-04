@@ -26,6 +26,7 @@ class PostReportsController extends AbstractController
         foreach ($postReports as $postReport) {
             $serializedPostReports[] = [
                 'id' => $postReport->getId(),
+                'post_id' => $postReport->getPost()->getId(),
                 'post_title' => $postReport->getPost()->getTitle(),
                 'post_image' => $postReport->getPost()->getImage(),
                 'post_user' => $postReport->getPost()->getUserId()->getUsername(),

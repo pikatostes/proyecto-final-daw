@@ -3,16 +3,31 @@ import { Form, Button, Modal, Image, Col, Row } from "react-bootstrap";
 
 const UserEditForm = ({ userData, onClose }) => {
   const [formData, setFormData] = useState(userData);
+  const [previewImage, setPreviewImage] = useState(null); // State for preview image
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, files } = e.target;
+
+    if (name === "avatar") {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => setPreviewImage(e.target.result); // Update preview image
+      reader.readAsDataURL(file);
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Lógica para enviar el formulario editado
-    console.log("Formulario enviado:", formData);
+    // Append the selected file to formData (if needed)
+    const formDataWithFile = new FormData();
+    formDataWithFile.append("avatar", files[0]); // Assuming you want to send the file
+    for (const key in formData) {
+      formDataWithFile.append(key, formData[key]);
+    }
+    // Lógica para enviar el formulario editado (using formDataWithFile if necessary)
+    console.log("Formulario enviado:", formDataWithFile);
     onClose(); // Cerrar el modal después de enviar el formulario
   };
 
@@ -41,29 +56,18 @@ const UserEditForm = ({ userData, onClose }) => {
           <Form.Group controlId="formRoles">
             <Form.Label>Roles</Form.Label>
             <Form.Control
-              type="text"
+              as="select"
               name="roles"
               value={formData.roles}
               onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
+            >
+              <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+              <option value="ROLE_USER">ROLE_USER</option>
+            </Form.Control>
           </Form.Group>
           <Form.Group controlId="formAvatar">
             <Form.Label>Avatar</Form.Label>
-            <Form.Control
-              type="file"
-              name="avatar"
-              value={""}
-              onChange={handleChange}
-            />
+            <Form.Control type="file" name="avatar" onChange={handleChange} />
             <Row>
               <Col xs={6}>
                 <h4>Old</h4>
@@ -71,7 +75,9 @@ const UserEditForm = ({ userData, onClose }) => {
               </Col>
               <Col xs={6}>
                 <h4>New</h4>
-                <Image src={formData.avatar} fluid roundedCircle />
+                {previewImage && (
+                  <Image src={previewImage} fluid roundedCircle />
+                )}
               </Col>
             </Row>
           </Form.Group>

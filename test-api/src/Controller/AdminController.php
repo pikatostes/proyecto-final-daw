@@ -52,7 +52,7 @@ class AdminController extends AbstractController
                 'user_id' => $post->getUserId()->getId(),
                 'user' => $post->getUserId()->getUsername(),
                 'avatar' => $post->getUserId()->getAvatar(),
-                'category_id' => $post->getCategory()->getName(),
+                'category' => $post->getCategory()->getName(),
                 'image' => $post->getImage()
             ];
         }
@@ -101,5 +101,35 @@ class AdminController extends AbstractController
 
         // Devolver una respuesta JSON de éxito
         return new JsonResponse(['success' => 'Usuario actualizado correctamente']);
+    }
+
+    #[Route('/user/delete', name: 'user_delete')]
+    public function userDelete(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Obtener el JSON de la solicitud POST
+        $jsonData = json_decode($request->getContent(), true);
+
+        // Verificar si se proporcionaron datos válidos
+        if (!$jsonData || !isset($jsonData['id']) || empty($jsonData['id'])) {
+            return new JsonResponse(['error' => 'Datos no válidos'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        // Obtener el ID del usuario a eliminar
+        $userId = $jsonData['id'];
+
+        // Buscar el usuario en la base de datos
+        $user = $userRepository->find($userId);
+
+        // Verificar si el usuario existe
+        if (!$user) {
+            return new JsonResponse(['error' => 'Usuario no encontrado'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Eliminar el usuario de la base de datos
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        // Devolver una respuesta JSON de èxito
+        return new JsonResponse(['success' => 'Usuario eliminado correctamente']);
     }
 }

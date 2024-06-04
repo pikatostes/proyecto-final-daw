@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  Accordion,
-  Card,
-  Button,
-  Col,
-  Image,
-  Row,
-  Container,
-} from "react-bootstrap";
+import { Accordion, Col, Image, Row, Container } from "react-bootstrap";
+import ThreePointsButton from "../../ThreePointsButton";
+import { deleteCommentReport } from "./commentReportsAdminUtils";
 
 const CommentReportsList = () => {
   const [commentReports, setCommentReports] = useState([]);
@@ -21,6 +15,11 @@ const CommentReportsList = () => {
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
+
+  const handleDelete = (reportId) => {
+    deleteCommentReport(reportId);
+    console.log(`Eliminar report con ID: ${reportId}`);
+  };
 
   // Agrupar los reports por comment ID
   const groupedReports = commentReports.reduce((acc, report) => {
@@ -78,9 +77,17 @@ const CommentReportsList = () => {
                       </Col>
                       <Col xs={9}>
                         <Row>
-                          <Col xs={12}>
+                          <Col xs={10}>
                             <strong>{report.user_name}</strong>
                           </Col>
+                          <Col xs={2}>
+                            <ThreePointsButton
+                              target={report}
+                              onDelete={handleDelete}
+                            />
+                          </Col>
+                        </Row>
+                        <Row>
                           <Col xs={12}>{report.description}</Col>
                         </Row>
                       </Col>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Container, Image, Table, Button, Spinner } from "react-bootstrap";
+import { Container, Image, Spinner, Row, Col, Card } from "react-bootstrap";
 import UserEditForm from "./UserEditForm";
+import ThreePointsButton from "../../ThreePointsButton";
+import { deleteUser } from "./userAdminUtils";
 
 const UserList = ({ apiUrl }) => {
   const [users, setUsers] = useState([]);
@@ -34,13 +36,17 @@ const UserList = ({ apiUrl }) => {
   };
 
   const handleDelete = (userId) => {
-    // Lógica para eliminar usuario
+    deleteUser(userId);
     console.log(`Eliminar usuario con ID: ${userId}`);
   };
 
   if (loading) {
     return (
-      <Container fluid className="d-flex justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+      <Container
+        fluid
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "50vh" }}
+      >
         <Spinner animation="border" role="status" />
       </Container>
     );
@@ -53,47 +59,34 @@ const UserList = ({ apiUrl }) => {
   return (
     <Container fluid>
       <h2>Lista de Usuarios</h2>
-      <div className="align-items-center">
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Roles</th>
-              <th>Password</th>
-              <th>Avatar</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.username}</td>
-                <td>{user.roles}</td>
-                <td>{user.password}</td>
-                <td>
-                  <Image
-                    src={user.avatar}
-                    alt={`Avatar de ${user.username}`}
-                    height={50}
-                    roundedCircle
+      {users.map((user) => (
+        <Card key={user.id} className="mb-2" style={{ height: "auto" }}>
+          <Row className="align-items-center p-2">
+            <Col xs={3}>
+              <Image
+                src={user.avatar}
+                alt={`Avatar de ${user.username}`}
+                roundedCircle
+                fluid
+                width={100}
+              />
+            </Col>
+            <Col xs={9}>
+              <Row className="align-items-center">
+                <Col xs={10}>{user.username}</Col>
+                <Col xs={2} className="d-flex justify-content-end">
+                  <ThreePointsButton
+                    target={user}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
                   />
-                </td>
-                <td>
-                  <Button variant="primary" onClick={() => handleEdit(user)}>
-                    Editar
-                  </Button>{" "}
-                  <Button
-                    variant="danger"
-                    onClick={() => handleDelete(user.id)}
-                  >
-                    Eliminar
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
+                </Col>
+              </Row>
+              {user.roles}
+            </Col>
+          </Row>
+        </Card>
+      ))}
       {selectedUser && ( // Renderizar UserEditForm si hay un usuario seleccionado
         <UserEditForm
           userData={selectedUser}
