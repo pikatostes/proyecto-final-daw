@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Card, Spinner, Image } from "react-bootstrap";
+import hyperdrive from "../assets/hyperdrive.gif";
 
 const CategoryIndex = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [hoveredCategory, setHoveredCategory] = useState(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -21,6 +23,8 @@ const CategoryIndex = () => {
     fetchCategories();
   }, []);
 
+  console.log(categories);
+
   return (
     <Container className="text-center">
       <h2>BrickPoint Creations</h2>
@@ -36,15 +40,35 @@ const CategoryIndex = () => {
           <>
             {categories.map((category) => (
               <Col key={category.id} xs={12} lg={6} className="mb-4">
-                <Card
+                <div
                   style={{
+                    position: "relative",
+                    width: "100%",
+                    height: "200px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    height: "200px",
                     border: "none",
                   }}
+                  onMouseEnter={() => setHoveredCategory(category.name)}
+                  onMouseLeave={() => setHoveredCategory(null)}
                 >
+                  {hoveredCategory === category.name && category.name === "Star Wars" && (
+                    <Image
+                      src={hyperdrive}
+                      alt="hyperdrive"
+                      style={{
+                        position: "absolute",
+                        width: "100%",
+                        height: "100%",
+                        top: 0,
+                        left: 0,
+                        opacity: 0.5,
+                        objectFit: "cover",
+                      }}
+                      rounded
+                    />
+                  )}
                   <Card.Img
                     variant="top"
                     src={category.image}
@@ -53,9 +77,12 @@ const CategoryIndex = () => {
                       objectFit: "contain",
                       maxHeight: "100%",
                       maxWidth: "100%",
+                      zIndex: 1,
+                      transform: hoveredCategory === category.name ? 'scale(0.9)' : 'scale(1)',
+                      transition: 'transform 0.3s ease',
                     }}
                   />
-                </Card>
+                </div>
               </Col>
             ))}
           </>
