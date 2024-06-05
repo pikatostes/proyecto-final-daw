@@ -12,21 +12,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../brickpoint-icon.png"; // Ruta de tu logo
 import Cart from "./Cart"; // Importa el componente Cart
 import { fetchUserDataUsingToken, logoutUser } from "../pages/userUtils"; // Correctly import the function
-import { Cart2, House, People, Person, PersonGear, Shop } from "react-bootstrap-icons";
+import {
+  Cart2,
+  House,
+  People,
+  Person,
+  PersonGear,
+  Shop,
+} from "react-bootstrap-icons";
 
 const NavigationBar = () => {
   const [showCart, setShowCart] = useState(false); // Estado para controlar si se muestra el carrito
-  const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    try {
-      const data = fetchUserDataUsingToken();
-      setUserData(data);
-    } catch (error) {
-      setError(error.message);
-    }
-  }, []);
+  const userData = fetchUserDataUsingToken();
 
   const handleLogout = () => {
     logoutUser();
