@@ -3,12 +3,15 @@ import { Card, Button, Row, Col, Spinner } from "react-bootstrap";
 import ColorCarousel from "./ColorCarousel";
 import PieceOptions from "./PieceOptions";
 import { CartPlus } from "react-bootstrap-icons";
+import ThreePointsButton from "./ThreePointsButton";
+import { deletePiece } from "./pieceUtils";
 
 const Inventory = ({ limit, filteredColors = [] }) => {
   const [inventoryData, setInventoryData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedPieceData, setSelectedPieceData] = useState(null);
+  const userData = JSON.parse(localStorage.getItem("userData"));
 
   useEffect(() => {
     const fetchInventoryData = async () => {
@@ -40,6 +43,15 @@ const Inventory = ({ limit, filteredColors = [] }) => {
     window.dispatchEvent(event);
   };
 
+  const handleEditPiece = (pieceData) => {
+    console.log("editing piece:", pieceData);
+  };
+
+  const handleDeletePiece = (pieceData) => {
+    console.log("deleting piece:", pieceData);
+    deletePiece(pieceData);
+  };
+
   if (loading) {
     return (
       <div className="text-center">
@@ -60,11 +72,17 @@ const Inventory = ({ limit, filteredColors = [] }) => {
 
   let pieces = inventoryData.slice(0, limit || inventoryData.length);
   if (filteredColors.length > 0) {
-    pieces = pieces.filter((piece) => filteredColors.includes(piece.color_id));
+    pieces = pieces.filter((piece) =>
+      piece.colors.some((color) => filteredColors.includes(color.name))
+    );
   }
 
   if (pieces.length === 0) {
-    return <p>No se encontraron piezas que coincidan con los filtros seleccionados.</p>;
+    return (
+      <p>
+        No se encontraron piezas que coincidan con los filtros seleccionados.
+      </p>
+    );
   }
 
   return (
@@ -84,12 +102,25 @@ const Inventory = ({ limit, filteredColors = [] }) => {
                         <Card.Title>{piece.name}</Card.Title>
                       </Col>
                       <Col xs={12} xl={6}>
-                        <Button
-                          variant="primary"
-                          onClick={() => handleAddToCart(piece)}
-                        >
-                          <CartPlus /> Add
-                        </Button>
+                        <Row>
+                          <Col>
+                            <Button
+                              variant="primary"
+                              onClick={() => handleAddToCart(piece)}
+                            >
+                              <CartPlus /> Add
+                            </Button>
+                          </Col>
+                          {userData && userData.roles.includes("ROLE_ADMIN") && (
+                            <Col>
+                              <ThreePointsButton
+                                target={piece}
+                                onEdit={handleEditPiece}
+                                onDelete={handleDeletePiece}
+                              />
+                            </Col>
+                          )}
+                        </Row>
                       </Col>
                     </Row>
                   </Card.Body>

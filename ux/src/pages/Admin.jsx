@@ -12,7 +12,7 @@ import PieceForm from "../components/admin/piece/PieceForm";
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("users");
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showNewPieceModal, setShowNewPieceModal] = useState(false);
+  const [showPieceFormModal, setShowPieceFormModal] = useState(false);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
@@ -24,8 +24,8 @@ const Admin = () => {
   const handleShowRegisterModal = () => setShowRegisterModal(true);
   const handleCloseRegisterModal = () => setShowRegisterModal(false);
 
-  const handleShowNewPieceModal = () => setShowNewPieceModal(true);
-  const handleCloseNewPieceModal = () => setShowNewPieceModal(false);
+  const handleShowPieceFormModal = () => setShowPieceFormModal(true);
+  const handleClosePieceFormModal = () => setShowPieceFormModal(false);
 
   return (
     <Container style={{ minHeight: "100vh" }} data-bs-theme="dark">
@@ -80,7 +80,7 @@ const Admin = () => {
             <Tab.Pane eventKey="pieces" active={activeTab === "pieces"}>
               <Button
                 variant="primary"
-                onClick={handleShowNewPieceModal}
+                onClick={handleShowPieceFormModal}
                 className="mt-3"
               >
                 New Piece
@@ -110,9 +110,10 @@ const Admin = () => {
       </Modal>
 
       <Modal
-        show={showNewPieceModal}
-        onHide={handleCloseNewPieceModal}
+        show={showPieceFormModal}
+        onHide={handleClosePieceFormModal}
         size="xl"
+        centered
       >
         <Modal.Header closeButton>
           <Modal.Title>Register New User</Modal.Title>
@@ -121,7 +122,7 @@ const Admin = () => {
           <PieceForm />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseRegisterModal}>
+          <Button variant="secondary" onClick={handleClosePieceFormModal}>
             Close
           </Button>
         </Modal.Footer>

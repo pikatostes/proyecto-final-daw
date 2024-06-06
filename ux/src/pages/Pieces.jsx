@@ -29,7 +29,7 @@ const Pieces = () => {
           />
           <br />
           <FilterSelector
-            endpoint="http://localhost:8000/category/"
+            endpoint="http://localhost:8000/category"
             onFilterChange={handleFilterChange}
             title="Category"
           />
@@ -58,7 +58,7 @@ const Pieces = () => {
             />
             <br />
             <FilterSelector
-              endpoint="http://localhost:8000/category/"
+              endpoint="http://localhost:8000/category"
               onFilterChange={handleFilterChange}
               title="Category"
             />

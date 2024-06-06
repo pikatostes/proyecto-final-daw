@@ -1,39 +1,22 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState, useEffect } from "react";
-import {
-  Navbar,
-  Nav,
-  Button,
-  Container,
-  Dropdown,
-  Image,
-} from "react-bootstrap";
+import React, { useState } from "react";
+import { Navbar, Nav, Button, Container, Dropdown, Image } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../brickpoint-icon.png"; // Ruta de tu logo
 import Cart from "./Cart"; // Importa el componente Cart
-import { fetchUserDataUsingToken, logoutUser } from "../pages/userUtils"; // Correctly import the function
-import {
-  Cart2,
-  House,
-  People,
-  Person,
-  PersonGear,
-  Shop,
-} from "react-bootstrap-icons";
+import { fetchUserDataUsingToken, logoutUser } from "../pages/userUtils"; // Importa correctamente la función
+import { Cart2, House, People, Person, PersonGear, Shop } from "react-bootstrap-icons";
 
 const NavigationBar = () => {
   const [showCart, setShowCart] = useState(false); // Estado para controlar si se muestra el carrito
-  const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    try {
-      const data = fetchUserDataUsingToken();
-      setUserData(data);
-    } catch (error) {
-      setError(error.message);
-    }
-  }, []);
+  // Obtener datos del usuario de localStorage de manera sincrónica
+  let userData = null;
+  try {
+    userData = fetchUserDataUsingToken();
+  } catch (err) {
+    console.error(err.message);
+  }
 
   const handleLogout = () => {
     logoutUser();
@@ -87,12 +70,8 @@ const NavigationBar = () => {
                     </Dropdown.Item>
                   )}
                   <Dropdown.Divider />
-                  <Dropdown.Item onClick={handleLogout}>
-                    <Button
-                      variant="danger"
-                      className="ms-lg-2"
-                      onClick={handleLogout}
-                    >
+                  <Dropdown.Item>
+                    <Button variant="danger" className="w-100" onClick={handleLogout}>
                       Log Out
                     </Button>
                   </Dropdown.Item>

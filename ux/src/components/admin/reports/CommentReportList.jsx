@@ -10,7 +10,6 @@ const CommentReportsList = () => {
     fetch("http://localhost:8000/comments/reports")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // Verifica el formato de los datos aquí
         setCommentReports(data);
       })
       .catch((error) => console.error("Error fetching data:", error));

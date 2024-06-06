@@ -104,17 +104,15 @@ export const getImageNames = async () => {
 
 export const fetchUserDataUsingToken = () => {
   const token = localStorage.getItem("token"); // Assuming the token is stored in localStorage
-  console.log(token)
 
   if (!token) {
-    logoutUser();
-    throw new Error("No token found");
+    // If no token, return null to signify that the user is not logged in
+    return null;
   }
 
   // Check if user data is already stored in localStorage
   const storedUserData = localStorage.getItem("userData");
   if (storedUserData) {
-    console.log(storedUserData)
     return JSON.parse(storedUserData);
   }
 
@@ -148,3 +146,4 @@ export const fetchUserDataUsingToken = () => {
     throw new Error(error.message);
   }
 };
+
