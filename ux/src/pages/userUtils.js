@@ -45,6 +45,7 @@ export const logoutUser = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user_role");
   localStorage.removeItem("userData");
+  console.log("log out done")
 };
 
 export const checkUserSession = () => {
@@ -103,6 +104,7 @@ export const getImageNames = async () => {
 
 export const fetchUserDataUsingToken = () => {
   const token = localStorage.getItem("token"); // Assuming the token is stored in localStorage
+  console.log(token)
 
   if (!token) {
     logoutUser();
@@ -112,6 +114,7 @@ export const fetchUserDataUsingToken = () => {
   // Check if user data is already stored in localStorage
   const storedUserData = localStorage.getItem("userData");
   if (storedUserData) {
+    console.log(storedUserData)
     return JSON.parse(storedUserData);
   }
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Nav, Tab, Row, Col } from "react-bootstrap";
 import PostsList from "../../PostsList";
 import PostReportsList from "../reports/PostReportsList";
+import PostCategories from "../../PostCategories";
 
 const PostPage = () => {
   const [activeTab, setActiveTab] = useState("post-list");
@@ -16,6 +17,9 @@ const PostPage = () => {
           <Nav.Item>
             <Nav.Link eventKey="post-reports">Reports</Nav.Link>
           </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="post-categories">Categories</Nav.Link>
+          </Nav.Item>
         </Nav>
         <Row className="mt-3">
           <Col>
@@ -25,6 +29,9 @@ const PostPage = () => {
               </Tab.Pane>
               <Tab.Pane eventKey="post-reports">
                 <PostReportsList />
+              </Tab.Pane>
+              <Tab.Pane eventKey="post-categories">
+                <PostCategories />
               </Tab.Pane>
             </Tab.Content>
           </Col>

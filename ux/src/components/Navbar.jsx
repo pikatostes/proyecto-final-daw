@@ -23,9 +23,17 @@ import {
 
 const NavigationBar = () => {
   const [showCart, setShowCart] = useState(false); // Estado para controlar si se muestra el carrito
+  const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
 
-  const userData = fetchUserDataUsingToken();
+  useEffect(() => {
+    try {
+      const data = fetchUserDataUsingToken();
+      setUserData(data);
+    } catch (error) {
+      setError(error.message);
+    }
+  }, []);
 
   const handleLogout = () => {
     logoutUser();

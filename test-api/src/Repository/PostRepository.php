@@ -24,7 +24,7 @@ class PostRepository extends ServiceEntityRepository
     public function findByQuery(string $query)
     {
         $results = $this->createQueryBuilder('p')
-            ->select('p.title', 'p.image', 'u.username', 'u.avatar')
+            ->select('p.id', 'p.title', 'p.image', 'u.username', 'u.avatar')
             ->leftJoin('p.user_id', 'u') // Asumiendo que 'user' es el nombre de la relación en la entidad 'Post'
             ->where('p.title LIKE :query OR p.description LIKE :query')
             ->setParameter('query', '%' . $query . '%')
@@ -35,6 +35,7 @@ class PostRepository extends ServiceEntityRepository
 
         foreach ($results as $result) {
             $formattedResults[] = [
+                'id' => $result['id'],
                 'title' => $result['title'],
                 'username' => $result['username'],
                 'avatar' => $result['avatar'],

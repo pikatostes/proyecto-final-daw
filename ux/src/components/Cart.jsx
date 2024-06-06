@@ -1,16 +1,28 @@
-// Cart.jsx
 import React, { useEffect, useState } from "react";
 import { Offcanvas, Card, Button, Col, Row } from "react-bootstrap";
+import { Trash } from "react-bootstrap-icons";
 
 const Cart = ({ show, setShowCart }) => {
   const [cartItems, setCartItems] = useState([]); // Estado local para almacenar los elementos del carrito
 
+  const loadCartItems = () => {
+    const sessionCartItems = JSON.parse(localStorage.getItem("cart")) || [];
+    setCartItems(sessionCartItems);
+  };
+
   useEffect(() => {
-    // Obtener cartItems de la sesión cuando el componente se monta
-    const sessionCartItems = JSON.parse(localStorage.getItem("cart"));
-    if (sessionCartItems) {
-      setCartItems(sessionCartItems);
-    }
+    loadCartItems();
+
+    // Escucha el evento personalizado para actualizar el carrito
+    const handleCartUpdate = () => {
+      loadCartItems();
+    };
+
+    window.addEventListener("cartUpdated", handleCartUpdate);
+
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdate);
+    };
   }, []);
 
   const handleClose = () => setShowCart(false);
@@ -62,7 +74,7 @@ const Cart = ({ show, setShowCart }) => {
                         variant="danger"
                         onClick={() => handleRemoveItem(index)}
                       >
-                        <img src="./trash.svg" alt="Remove" />
+                        <Trash />
                       </Button>
                     </Col>
                   </Row>

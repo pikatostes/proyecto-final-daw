@@ -35,7 +35,9 @@ export const handleLike = async (postId, userId, posts, setPosts) => {
 
     const updatedPosts = posts.map((post) => {
       if (post.id === postId) {
-        const totalLikes = result.liked ? post.totalLikes + 1 : post.totalLikes - 1;
+        const totalLikes = result.liked
+          ? post.totalLikes + 1
+          : post.totalLikes - 1;
         return { ...post, totalLikes };
       }
       return post;
@@ -137,6 +139,60 @@ export const handleReportPost = async (
   } catch (error) {
     console.error("Error:", error);
     setError("Error al reportar el post");
+  }
+};
+
+export const createPostCategory = async (categoryData) => {
+  try {
+    const formData = new FormData();
+    formData.append("name", categoryData.name);
+    formData.append("image", categoryData.image);
+
+    const response = await fetch(`${API_URL}/post/category/new`, {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error("Error al crear la categoría");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+export const updatePostCategory = async (category) => {
+  console.log(category)
+  try {
+    const formData = new FormData();
+    formData.append("id", category.id);
+    formData.append("name", category.name);
+    formData.append("image", category.image);
+
+    const response = await fetch(`${API_URL}/post/category/update`, {
+      method: "PATCH",
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error("Error al actualizar la categoría");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+export const deletePostCategory = async (categoryId) => {
+  try {
+    const response = await fetch(
+      `${API_URL}/post/category/${categoryId}/delete`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Error al eliminar la categoría");
+    }
+  } catch (error) {
+    console.error("Error:", error);
   }
 };
 

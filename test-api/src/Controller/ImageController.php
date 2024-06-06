@@ -17,12 +17,7 @@ class ImageController extends AbstractController
         // Escanear el directorio de imágenes y obtener los nombres de archivo
         $images = array_diff(scandir($imageDirectory), array('..', '.'));
 
-        // Filtrar solo los archivos .jpg
-        $imageNames = array_filter($images, function ($file) {
-            return pathinfo($file, PATHINFO_EXTENSION) === 'jpg';
-        });
-
-        // Devolver la lista de nombres de imágenes
-        return $this->json($imageNames);
+        // Devolver la lista de nombres de imágenes (sin filtrar por extensión)
+        return $this->json($images);
     }
 }
