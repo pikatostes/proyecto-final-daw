@@ -13,6 +13,7 @@ const Inventory = ({ limit, filteredColors = [] }) => {
   const [error, setError] = useState(null);
   const [selectedPieceData, setSelectedPieceData] = useState(null);
   const [showPieceFormModal, setShowPieceFormModal] = useState(false);
+  const [showPieceOptionsModal, setShowPieceOptionsModal] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
 
   useEffect(() => {
@@ -35,14 +36,8 @@ const Inventory = ({ limit, filteredColors = [] }) => {
   }, []);
 
   const handleAddToCart = (pieceData) => {
-    let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-    cartItems.push(pieceData);
-    localStorage.setItem("cart", JSON.stringify(cartItems));
     setSelectedPieceData(pieceData);
-
-    // Dispara un evento personalizado para notificar la actualización del carrito
-    const event = new CustomEvent("cartUpdated");
-    window.dispatchEvent(event);
+    setShowPieceOptionsModal(true);
   };
 
   const handleEditPiece = (pieceData) => {
@@ -57,6 +52,10 @@ const Inventory = ({ limit, filteredColors = [] }) => {
   const handleAddPieceDetail = (pieceData) => {
     setSelectedPieceData(pieceData);
     setShowPieceFormModal(true);
+  };
+
+  const handleClosePieceOptions = () => {
+    setShowPieceOptionsModal(false);
   };
 
   if (loading) {
@@ -157,6 +156,13 @@ const Inventory = ({ limit, filteredColors = [] }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {selectedPieceData && (
+        <PieceOptions
+          pieceData={selectedPieceData}
+          onClose={handleClosePieceOptions}
+        />
+      )}
     </div>
   );
 };

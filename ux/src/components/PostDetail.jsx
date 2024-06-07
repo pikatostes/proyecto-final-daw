@@ -69,7 +69,7 @@ console.log(post)
         <Container fluid>
           <Row>
             <Col xs={12} md={6}>
-              <img src={post.image} alt={post.title} className="img-fluid" />
+              <Image src={post.image} alt={post.title} fluid />
               <p>{post.description}</p>
             </Col>
             <Col xs={12} md={6}>

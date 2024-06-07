@@ -63,16 +63,17 @@ class AdminController extends AbstractController
     #[Route('/user/edit', name: 'user_edit')]
     public function userEdit(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): JsonResponse
     {
-        // Obtener el JSON de la solicitud POST
-        $jsonData = json_decode($request->getContent(), true);
+        // Obtener los datos del formulario
+        $userId = $request->request->get('id');
+        $username = $request->request->get('username');
+        $roles = $request->request->get('roles');
+        $password = $request->request->get('password');
+        $avatarUrl = $request->request->get('avatar');
 
         // Verificar si se proporcionaron datos válidos
-        if (!$jsonData || !isset($jsonData['id']) || empty($jsonData['id'])) {
+        if (!$userId) {
             return new JsonResponse(['error' => 'Datos no válidos'], JsonResponse::HTTP_BAD_REQUEST);
         }
-
-        // Obtener el ID del usuario a editar
-        $userId = $jsonData['id'];
 
         // Buscar el usuario en la base de datos
         $user = $userRepository->find($userId);
@@ -82,18 +83,22 @@ class AdminController extends AbstractController
             return new JsonResponse(['error' => 'Usuario no encontrado'], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        // Actualizar los datos del usuario con los valores proporcionados en el JSON
-        if (isset($jsonData['username'])) {
-            $user->setUsername($jsonData['username']);
+        // Actualizar los datos del usuario con los valores proporcionados en el formulario
+        if ($username !== null) {
+            $user->setUsername($username);
         }
-        if (isset($jsonData['roles'])) {
-            $user->setRoles($jsonData['roles']);
+        if ($roles !== null) {
+            $user->setRoles(explode(',', $roles)); // Suponiendo que los roles se envían como una cadena separada por comas
         }
-        if (isset($jsonData['password'])) {
-            $user->setPassword($jsonData['password']);
+        if ($password !== null) {
+            $user->setPassword($password); // Asegúrate de manejar correctamente el hash de la contraseña en producción
         }
-        if (isset($jsonData['avatar'])) {
-            $user->setAvatar($jsonData['avatar']);
+        if ($avatarUrl !== null) {
+            $imageContent = file_get_contents($avatarUrl);
+            $imageMimeType = getimagesizefromstring($imageContent)['mime'];
+            $avatarBase64 = base64_encode($imageContent);
+            $avatarImage = 'data:' . $imageMimeType . ';base64,' . $avatarBase64;
+            $user->setAvatar($avatarImage);
         }
 
         // Guardar los cambios en la base de datos

@@ -1,10 +1,11 @@
-import React from "react";
-import { Container, Form, Image } from "react-bootstrap";
+// AvatarSelection.js
+import React from 'react';
+import { Form, Container, Image } from 'react-bootstrap';
 import { CheckCircle } from 'react-bootstrap-icons';
 
 const AvatarGallery = ({ images, selectedImage, handleImageClick }) => {
   return (
-    <Form.Group controlId="avatarGallery" className="mb-3">
+    <Form.Group controlId="avatarSelection" className="mb-3">
       <Form.Label>Select an Avatar from gallery</Form.Label>
       <Container className="d-flex flex-wrap" fluid style={{ maxHeight: "35vh", overflowX: "auto" }}>
         {Object.entries(images).map(([key, imageName]) => (

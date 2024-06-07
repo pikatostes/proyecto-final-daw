@@ -1,34 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Modal, Image, Col, Row } from "react-bootstrap";
+import AvatarGallery from "../../AvatarGallery";
 
 const UserEditForm = ({ userData, onClose }) => {
   const [formData, setFormData] = useState(userData);
-  const [previewImage, setPreviewImage] = useState(null); // State for preview image
+  const [previewImage, setPreviewImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(userData.avatar);
+  const [images, setImages] = useState({});
+
+  useEffect(() => {
+    fetch("http://localhost:8000/images")
+      .then(response => response.json())
+      .then(data => setImages(data))
+      .catch(error => console.error("Error fetching images:", error));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
-    if (name === "avatar") {
+    if (name === "avatar" && files && files[0]) {
       const file = files[0];
       const reader = new FileReader();
-      reader.onload = (e) => setPreviewImage(e.target.result); // Update preview image
+      reader.onload = (e) => setPreviewImage(e.target.result);
       reader.readAsDataURL(file);
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
+  const handleImageClick = (imageName) => {
+    setSelectedImage(imageName);
+    setPreviewImage(`http://localhost:8000/images/${imageName}`);
+    setFormData({ ...formData, avatar: imageName });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Append the selected file to formData (if needed)
     const formDataWithFile = new FormData();
-    formDataWithFile.append("avatar", files[0]); // Assuming you want to send the file
+    formDataWithFile.append("avatar", selectedImage);
     for (const key in formData) {
       formDataWithFile.append(key, formData[key]);
     }
-    // Lógica para enviar el formulario editado (using formDataWithFile if necessary)
     console.log("Formulario enviado:", formDataWithFile);
-    onClose(); // Cerrar el modal después de enviar el formulario
+    onClose();
   };
 
   return (
@@ -67,11 +80,10 @@ const UserEditForm = ({ userData, onClose }) => {
           </Form.Group>
           <Form.Group controlId="formAvatar">
             <Form.Label>Avatar</Form.Label>
-            <Form.Control type="file" name="avatar" onChange={handleChange} />
             <Row>
               <Col xs={6}>
                 <h4>Old</h4>
-                <Image src={formData.avatar} fluid roundedCircle />
+                <Image src={userData.avatar} fluid roundedCircle />
               </Col>
               <Col xs={6}>
                 <h4>New</h4>
@@ -81,6 +93,11 @@ const UserEditForm = ({ userData, onClose }) => {
               </Col>
             </Row>
           </Form.Group>
+          <AvatarGallery
+            images={images} 
+            selectedImage={selectedImage} 
+            handleImageClick={handleImageClick} 
+          />
           <Button variant="primary" type="submit">
             Guardar Cambios
           </Button>

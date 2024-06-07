@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ColorCarousel from "./ColorCarousel";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { CartPlus } from "react-bootstrap-icons";
 
 const PieceOptions = ({ pieceData, onClose }) => {
   const [selectedColor, setSelectedColor] = useState(null);
@@ -37,6 +38,8 @@ const PieceOptions = ({ pieceData, onClose }) => {
       setCart(updatedCart);
       localStorage.setItem("cart", JSON.stringify(updatedCart));
     }
+
+    onClose();
   };
 
   return (
@@ -102,7 +105,7 @@ const PieceOptions = ({ pieceData, onClose }) => {
           Close
         </Button>
         <Button variant="primary" onClick={handleAddToCart}>
-          <img src="./cart-plus.svg" alt="Add to Cart" />
+          <CartPlus alt="Add to Cart" />
         </Button>
       </Modal.Footer>
     </Modal>

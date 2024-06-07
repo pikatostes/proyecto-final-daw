@@ -68,7 +68,7 @@ export const createBillingInfo = async (
 
     try {
       const response = await fetch(
-        `http://localhost:8000/user/${userId}/create/billingInfo`,
+        `http://localhost:8000/billingInfo/new`,
         {
           method: "POST",
           body: formData,

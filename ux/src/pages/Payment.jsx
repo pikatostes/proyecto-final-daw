@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { fetchUserBillingInfo } from "../components/profileUtil";
+import { Trash } from "react-bootstrap-icons";
 
 const Payment = () => {
   const [cartItems, setCartItems] = useState([]); // Estado local para almacenar los elementos del carrito
@@ -26,10 +27,12 @@ const Payment = () => {
     if (userSession) {
       fetchUserBillingInfo(userSession)
         .then((data) => {
-          setBillingInfoOptions(data.map((info) => ({
-            id: info.id,
-            address: info.address,
-          })));
+          setBillingInfoOptions(
+            data.map((info) => ({
+              id: info.id,
+              address: info.address,
+            }))
+          );
         })
         .catch((error) => {
           console.error("Error fetching billing info:", error);
@@ -142,7 +145,7 @@ const Payment = () => {
                           variant="danger"
                           onClick={() => handleRemoveItem(index)}
                         >
-                          <img src="./trash.svg" alt="Remove" />
+                          <Trash alt="Remove" />
                         </Button>
                       </Col>
                     </Row>
@@ -159,52 +162,57 @@ const Payment = () => {
           )}
         </Col>
         <Col xs={6}>
-          <Form className="mt-4">
-            <Form.Group controlId="billingInfo">
-              <Form.Label>Select Billing Info</Form.Label>
-              <Form.Select
-                onChange={handleSelectChange}
-                value={selectedBillingInfo}
-              >
-                <option value="">Choose...</option>
-                {billingInfoOptions.map((info) => (
-                  <option key={info.id} value={info.id}>
-                    {info.address}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-            <Form.Group controlId="cardNumber">
-              <Form.Label>Card Number</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter card number"
-                name="cardNumber"
-                value={cardInfo.cardNumber}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="expirationDate">
-              <Form.Label>Expiration Date</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="MM/YY"
-                name="expirationDate"
-                value={cardInfo.expirationDate}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="cvv">
-              <Form.Label>CVV</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter CVV"
-                name="cvv"
-                value={cardInfo.cvv}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Form>
+          <Card>
+            <Card.Header>Fill the form</Card.Header>
+            <Card.Body>
+              <Form className="mt-4">
+                <Form.Group controlId="billingInfo">
+                  <Form.Label>Select Billing Info</Form.Label>
+                  <Form.Select
+                    onChange={handleSelectChange}
+                    value={selectedBillingInfo}
+                  >
+                    <option value="">Choose...</option>
+                    {billingInfoOptions.map((info) => (
+                      <option key={info.id} value={info.id}>
+                        {info.address}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group controlId="cardNumber">
+                  <Form.Label>Card Number</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter card number"
+                    name="cardNumber"
+                    value={cardInfo.cardNumber}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+                <Form.Group controlId="expirationDate">
+                  <Form.Label>Expiration Date</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="MM/YY"
+                    name="expirationDate"
+                    value={cardInfo.expirationDate}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+                <Form.Group controlId="cvv">
+                  <Form.Label>CVV</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter CVV"
+                    name="cvv"
+                    value={cardInfo.cvv}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+              </Form>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>
