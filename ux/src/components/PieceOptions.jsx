@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Modal, Button, Form, Row, Col, Image } from "react-bootstrap";
 import ColorCarousel from "./ColorCarousel";
-import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { CartPlus } from "react-bootstrap-icons";
 
 const PieceOptions = ({ pieceData, onClose }) => {
@@ -17,9 +17,9 @@ const PieceOptions = ({ pieceData, onClose }) => {
       const colorDetails = pieceData.colors.find(
         (color) => color.name === selectedColor.name
       );
-      setMaxQuantity(colorDetails.stock); // Establecer el máximo como el stock actual del color seleccionado
+      setMaxQuantity(colorDetails.stock);
       if (quantity > colorDetails.stock) {
-        setQuantity(colorDetails.stock); // Si la cantidad excede el stock, ajustarla al stock máximo
+        setQuantity(colorDetails.stock);
       }
     }
   }, [pieceData, selectedColor, quantity]);
@@ -32,7 +32,7 @@ const PieceOptions = ({ pieceData, onClose }) => {
         color: selectedColor.name,
         quantity: quantity,
         price: totalPrice,
-        image: selectedColor.image // Agregar la URL de la imagen del color correspondiente
+        image: selectedColor.image
       };
       const updatedCart = [...cart, newItem];
       setCart(updatedCart);
@@ -56,7 +56,14 @@ const PieceOptions = ({ pieceData, onClose }) => {
       <Modal.Body>
         <Row>
           <Col lg={6}>
-            <ColorCarousel colors={pieceData.colors} />
+            {selectedColor && (
+                <Image
+                  src={selectedColor.image}
+                  alt={selectedColor.name}
+                  style={{ width: "100%", height: "auto" }}
+                  fluid
+                />
+            )}
           </Col>
           <Col lg={6}>
             <Form>

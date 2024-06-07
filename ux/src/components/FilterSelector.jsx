@@ -1,6 +1,5 @@
-// FilterSelector.jsx
 import React, { useState, useEffect } from "react";
-import { ListGroup, Form, Accordion, AccordionBody } from "react-bootstrap";
+import { ListGroup, Form, Accordion } from "react-bootstrap";
 
 const FilterSelector = ({ title, endpoint, renderFilter, onFilterChange }) => {
   const [filters, setFilters] = useState([]);
@@ -34,13 +33,9 @@ const FilterSelector = ({ title, endpoint, renderFilter, onFilterChange }) => {
     setFilters(updatedFilters);
     // Llama a la función onFilterChange pasando los filtros seleccionados
     const selectedFilters = updatedFilters.filter((filter) => filter.selected);
-    console.log("Selected filters in FilterSelector:", selectedFilters);
+    console.log(`[${title}] Selected filters:`, selectedFilters);
     onFilterChange(selectedFilters);
   };
-
-  if (filters.length === 0) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="sidebar">

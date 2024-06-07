@@ -109,7 +109,7 @@ const Admin = () => {
               >
                 New Color
               </Button>
-              <Inventory />
+              <Inventory apiUrl={"http://localhost:8000/piece"}/>
             </Tab.Pane>
           </Tab.Content>
         </Col>

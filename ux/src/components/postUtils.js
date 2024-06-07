@@ -83,7 +83,7 @@ export const updatePost = async (postId, postData) => {
   }
 
   const response = await fetch(`${API_URL}/post/${postId}/update`, {
-    method: "PATCH",
+    method: "POST",
     body: formData,
   });
 

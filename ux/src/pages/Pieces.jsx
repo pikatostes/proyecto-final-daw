@@ -1,20 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Inventory from "../components/Inventory";
 import FilterSelector from "../components/FilterSelector";
 import { Col, Row, Button, Offcanvas } from "react-bootstrap";
 
 const Pieces = () => {
-  const [selectedFilters, setSelectedFilters] = useState({});
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [pieces, setPieces] = useState([]);
 
-  const handleFilterChange = (filters) => {
-    // Actualiza el estado de los filtros seleccionados
-    setSelectedFilters(filters);
+  useEffect(() => {
+    const fetchPieces = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/piece/shop");
+        if (!response.ok) {
+          throw new Error("Failed to fetch pieces");
+        }
+        const data = await response.json();
+        console.log("Fetched pieces:", data);
+        setPieces(data);
+      } catch (error) {
+        console.error("Error fetching pieces:", error);
+      }
+    };
+
+    fetchPieces();
+  }, []);
+
+  const handleColorFilterChange = (filters) => {
+    const colors = filters.map(filter => filter.name);
+    console.log("Selected colors:", colors);
+    setSelectedColors(colors);
+  };
+
+  const handleCategoryFilterChange = (filters) => {
+    const categories = filters.map(filter => filter.name);
+    console.log("Selected categories:", categories);
+    setSelectedCategories(categories);
   };
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
+
+  const filteredPieces = pieces.filter(piece => {
+    const matchesColor = selectedColors.length === 0 || piece.colors.some(color => selectedColors.includes(color.name));
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(piece.category);
+    console.log(`Piece ${piece.name} matchesColor: ${matchesColor}, matchesCategory: ${matchesCategory}`);
+    return matchesColor && matchesCategory;
+  });
+
+  console.log("Filtered pieces:", filteredPieces);
 
   return (
     <div className="container-fluid">
@@ -24,13 +60,13 @@ const Pieces = () => {
           <h2>Filters</h2>
           <FilterSelector
             endpoint="http://localhost:8000/color/"
-            onFilterChange={handleFilterChange}
+            onFilterChange={handleColorFilterChange}
             title="Color"
           />
           <br />
           <FilterSelector
             endpoint="http://localhost:8000/category"
-            onFilterChange={handleFilterChange}
+            onFilterChange={handleCategoryFilterChange}
             title="Category"
           />
         </Col>
@@ -45,7 +81,6 @@ const Pieces = () => {
           show={showFilters}
           onHide={() => setShowFilters(false)}
           className="d-lg-none"
-          data-bs-theme="dark"
         >
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>Filters</Offcanvas.Title>
@@ -53,23 +88,20 @@ const Pieces = () => {
           <Offcanvas.Body>
             <FilterSelector
               endpoint="http://localhost:8000/color/"
-              onFilterChange={handleFilterChange}
+              onFilterChange={handleColorFilterChange}
               title="Color"
             />
             <br />
             <FilterSelector
               endpoint="http://localhost:8000/category"
-              onFilterChange={handleFilterChange}
+              onFilterChange={handleCategoryFilterChange}
               title="Category"
             />
           </Offcanvas.Body>
         </Offcanvas>
         {/* Columna para mostrar inventario */}
         <Col lg={10} xs={12} className="overflow-auto">
-          <Inventory
-            limit={10}
-            filteredColors={selectedFilters.colors}
-          />
+          <Inventory pieces={filteredPieces} />
         </Col>
       </Row>
     </div>
