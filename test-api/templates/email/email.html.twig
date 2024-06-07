@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
+
+    <!-- Header Section -->
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+        <tr>
+            <td align="center" bgcolor="#ffffff" style="padding: 20px 0;">
+                <img src="./brickpoint-icon.png" alt="BrickPoint Logo" width="200">
+            </td>
+        </tr>
+    </table>
+
+    <!-- Content Section -->
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+        <tr>
+            <td bgcolor="#ffffff" style="padding: 20px;">
+                {% block content %}
+                <h1 style="color: #333333;">{{ title }}</h1>
+                <p style="color: #666666;">{{ message }}</p>
+                {% endblock %}
+            </td>
+        </tr>
+    </table>
+
+    <!-- Footer Section -->
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+        <tr>
+            <td bgcolor="#ffffff" align="center" style="padding: 20px;">
+                <p style="color: #999999;">Este correo electrónico fue enviado por BrickPoint. No responda a este correo.</p>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
