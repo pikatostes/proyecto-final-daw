@@ -8,11 +8,15 @@ import { PersonGear } from "react-bootstrap-icons";
 import Register from "../pages/Register";
 import PostPage from "../components/admin/post/PostPage";
 import PieceForm from "../components/admin/piece/PieceForm";
+import ColorForm from "../components/admin/color/ColorForm"; // Importar el formulario de color
+import { createColor } from "../components/admin/color/colorUtils";
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("users");
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showPieceFormModal, setShowPieceFormModal] = useState(false);
+  const [showColorFormModal, setShowColorFormModal] = useState(false); // Estado para el modal del formulario de color
+  const [selectedPieceData, setSelectedPieceData] = useState(null);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
@@ -24,8 +28,21 @@ const Admin = () => {
   const handleShowRegisterModal = () => setShowRegisterModal(true);
   const handleCloseRegisterModal = () => setShowRegisterModal(false);
 
-  const handleShowPieceFormModal = () => setShowPieceFormModal(true);
+  const handleShowPieceFormModal = () => {
+    setSelectedPieceData(null);
+    setShowPieceFormModal(true);
+  };
   const handleClosePieceFormModal = () => setShowPieceFormModal(false);
+
+  const handleShowColorFormModal = () => setShowColorFormModal(true); // Mostrar el modal del formulario de color
+  const handleCloseColorFormModal = () => setShowColorFormModal(false); // Ocultar el modal del formulario de color
+
+  const handleCreateColor = (color) => {
+    // Aquí puedes manejar el envío del color al backend o cualquier otra lógica que necesites
+    console.log("Color creado:", color);
+    createColor(color);
+    setShowColorFormModal(false);
+  };
 
   return (
     <Container style={{ minHeight: "100vh" }} data-bs-theme="dark">
@@ -85,6 +102,13 @@ const Admin = () => {
               >
                 New Piece
               </Button>
+              <Button
+                variant="secondary"
+                onClick={handleShowColorFormModal}
+                className="mt-3"
+              >
+                New Color
+              </Button>
               <Inventory />
             </Tab.Pane>
           </Tab.Content>
@@ -116,13 +140,32 @@ const Admin = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Register New User</Modal.Title>
+          <Modal.Title>Piece Detail</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <PieceForm />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClosePieceFormModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showColorFormModal}
+        onHide={handleCloseColorFormModal}
+        size="md"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>New Color</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ColorForm onSubmit={handleCreateColor} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseColorFormModal}>
             Close
           </Button>
         </Modal.Footer>

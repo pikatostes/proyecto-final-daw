@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Color;
 use Doctrine\ORM\EntityManagerInterface; // Importar el EntityManagerInterface
+use Symfony\Component\HttpFoundation\Request;
 
 class ColorController extends AbstractController
 {
@@ -46,6 +47,29 @@ class ColorController extends AbstractController
         
         // Crear una respuesta JSON y devolverla
         return new JsonResponse($jsonData, 200, [], true);
+    }
+
+    #[Route('/color/new', name: 'new_color')]
+    public function newColor(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+        // Get data from request
+        $name = $request->request->get('name');
+
+        // Validate the data
+        if (!$name) {
+            return $this->json(['error' => 'Invalid input data'], 400);
+        }
+
+        // Create a new Color entity
+        $color = new Color();
+        $color->setName($name);
+
+        // Persist and flush the new entity
+        $entityManager->persist($color);
+        $entityManager->flush();
+
+        // Return the newly created color as a JSON response
+        return $this->json($color, 201);
     }
 }
 

@@ -3,6 +3,7 @@ import { OverlayTrigger, Popover } from "react-bootstrap";
 import {
   FlagFill,
   PencilSquare,
+  PlusCircle,
   ThreeDotsVertical,
   Trash,
 } from "react-bootstrap-icons";
@@ -12,6 +13,7 @@ const ThreePointsButton = ({
   onEdit,
   onDelete,
   onReport,
+  onAddPieceDetail, // New prop for handling "Add Piece Detail"
   userSession,
 }) => {
   const userData = JSON.parse(localStorage.getItem("userData")) || {};
@@ -59,6 +61,18 @@ const ThreePointsButton = ({
                   />{" "}
                   Delete
                 </p>
+                {target.colors && ( // Check if target has a price
+                  <p>
+                    <PlusCircle
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onAddPieceDetail(target); // Handle "Add Piece Detail"
+                      }}
+                      style={{ cursor: "pointer" }}
+                    />{" "}
+                    Add Piece Detail
+                  </p>
+                )}
               </>
             )}
           </Popover.Body>

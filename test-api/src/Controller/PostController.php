@@ -131,59 +131,58 @@ class PostController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'update_post', methods: ['PATCH'])]
-public function updatePost(int $id, Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository): JsonResponse
-{
-    // Encontrar el post correspondiente
-    $post = $postRepository->find($id);
+    public function updatePost(int $id, Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository): JsonResponse
+    {
+        // Encontrar el post correspondiente
+        $post = $postRepository->find($id);
 
-    if (!$post) {
-        return new JsonResponse(['error' => 'Post not found'], Response::HTTP_NOT_FOUND);
-    }
+        if (!$post) {
+            return new JsonResponse(['error' => 'Post not found'], Response::HTTP_NOT_FOUND);
+        }
 
-    // Obtener otros datos opcionales del formulario
-    $title = $request->request->get('title');
-    $description = $request->request->get('description');
-    $category_id = $request->request->get('category');
-    $image = $request->files->get('image');
+        // Obtener otros datos opcionales del formulario
+        $title = $request->request->get('title');
+        $description = $request->request->get('description');
+        $category_id = $request->request->get('category');
+        $image = $request->files->get('image');
 
-    $isUpdated = false;
+        $isUpdated = false;
 
-    if ($title !== null) {
-        $post->setTitle($title);
-        $isUpdated = true;
-    }
-
-    if ($description !== null) {
-        $post->setDescription($description);
-        $isUpdated = true;
-    }
-
-    if ($image !== null) {
-        $imageBase64 = base64_encode(file_get_contents($image->getPathname()));
-        $imageCoded = 'data:' . $image->getClientMimeType() . ';base64,' . $imageBase64;
-        $post->setImage($imageCoded);
-        $isUpdated = true;
-    }
-
-    if ($category_id !== null) {
-        $category = $entityManager->find(PostCategory::class, $category_id);
-        if ($category !== null) {
-            $post->setCategory($category);
+        if ($title !== null) {
+            $post->setTitle($title);
             $isUpdated = true;
         }
+
+        if ($description !== null) {
+            $post->setDescription($description);
+            $isUpdated = true;
+        }
+
+        if ($image !== null) {
+            $imageBase64 = base64_encode(file_get_contents($image->getPathname()));
+            $imageCoded = 'data:' . $image->getClientMimeType() . ';base64,' . $imageBase64;
+            $post->setImage($imageCoded);
+            $isUpdated = true;
+        }
+
+        if ($category_id !== null) {
+            $category = $entityManager->find(PostCategory::class, $category_id);
+            if ($category !== null) {
+                $post->setCategory($category);
+                $isUpdated = true;
+            }
+        }
+
+        if ($isUpdated) {
+            $post->setUpdatedAt(new \DateTime());
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            return new JsonResponse(['message' => 'Post updated successfully'], Response::HTTP_OK);
+        } else {
+            return new JsonResponse(['error' => "No data to update for post ID $id"], Response::HTTP_BAD_REQUEST);
+        }
     }
-
-    if ($isUpdated) {
-        $post->setUpdatedAt(new \DateTime());
-        $entityManager->persist($post);
-        $entityManager->flush();
-
-        return new JsonResponse(['message' => 'Post updated successfully'], Response::HTTP_OK);
-    } else {
-        return new JsonResponse(['error' => "No data to update for post ID $id"], Response::HTTP_BAD_REQUEST);
-    }
-}
-
 
     #[Route('/{id}/like', name: 'post_like', methods: ['POST'])]
     public function likePost($id, EntityManagerInterface $entityManager, Request $request): JsonResponse

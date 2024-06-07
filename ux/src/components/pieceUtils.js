@@ -1,14 +1,11 @@
 export const newPiece = async (formData) => {
-  console.log(formData);
+  for (const [key, value] of formData.entries()) {
+    console.log(`${key}: ${value}`);
+  }
   try {
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("category_id", formData.category);
-
     const response = await fetch("http://localhost:8000/piece/new", {
       method: "POST",
-      body: formDataToSend, // Cambiar formData a formDataToSend
+      body: formData, // Cambiar formData a formDataToSend
     });
     if (!response.ok) {
       throw new Error("Error al crear la pieza");
@@ -34,6 +31,26 @@ export const deletePiece = async (pieceId) => {
       throw new Error("Error al eliminar la pieza");
     }
     console.log("Pieza eliminada");
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+export const newPieceDetail = async (formData) => {
+  for (const [key, value] of formData.entries()) {
+    console.log(`${key}: ${value}`);
+  }
+  try {
+    const response = await fetch("http://localhost:8000/piece/detail/new", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error("Error al crear el detalle de la pieza");
+    } else {
+      const data = await response.json();
+      console.log("Detalle creada:", data);
+    }
   } catch (error) {
     console.error("Error:", error);
   }

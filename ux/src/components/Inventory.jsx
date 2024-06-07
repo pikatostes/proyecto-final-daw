@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Row, Col, Spinner } from "react-bootstrap";
+import { Card, Button, Row, Col, Spinner, Modal } from "react-bootstrap";
 import ColorCarousel from "./ColorCarousel";
 import PieceOptions from "./PieceOptions";
 import { CartPlus } from "react-bootstrap-icons";
 import ThreePointsButton from "./ThreePointsButton";
 import { deletePiece } from "./pieceUtils";
+import PieceForm from "../components/admin/piece/PieceForm";
 
 const Inventory = ({ limit, filteredColors = [] }) => {
   const [inventoryData, setInventoryData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedPieceData, setSelectedPieceData] = useState(null);
+  const [showPieceFormModal, setShowPieceFormModal] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
 
   useEffect(() => {
@@ -50,6 +52,11 @@ const Inventory = ({ limit, filteredColors = [] }) => {
   const handleDeletePiece = (pieceData) => {
     console.log("deleting piece:", pieceData);
     deletePiece(pieceData);
+  };
+
+  const handleAddPieceDetail = (pieceData) => {
+    setSelectedPieceData(pieceData);
+    setShowPieceFormModal(true);
   };
 
   if (loading) {
@@ -117,6 +124,7 @@ const Inventory = ({ limit, filteredColors = [] }) => {
                                 target={piece}
                                 onEdit={handleEditPiece}
                                 onDelete={handleDeletePiece}
+                                onAddPieceDetail={handleAddPieceDetail}
                               />
                             </Col>
                           )}
@@ -130,12 +138,25 @@ const Inventory = ({ limit, filteredColors = [] }) => {
           </Col>
         ))}
       </Row>
-      {selectedPieceData && (
-        <PieceOptions
-          pieceData={selectedPieceData}
-          onClose={() => setSelectedPieceData(null)}
-        />
-      )}
+
+      <Modal
+        show={showPieceFormModal}
+        onHide={() => setShowPieceFormModal(false)}
+        size="xl"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Piece Detail</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <PieceForm piece={selectedPieceData} pieceDetail />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowPieceFormModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

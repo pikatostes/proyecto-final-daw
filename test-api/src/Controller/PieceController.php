@@ -56,37 +56,51 @@ class PieceController extends AbstractController
     #[Route('/piece/new', name: 'new_piece')]
     public function newPiece(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
+        // Get data from request
         $name = $request->request->get('name');
         $description = $request->request->get('description');
-        $category = $request->request->get('category_id');
+        $categoryId = $request->request->get('category_id');
 
-        // find category on table category
-        $category = $entityManager->getRepository(Category::class)->find($category);
-
-        if (!$category) {
-            return $this->json(['error' => 'Categoría no encontrada'], 404);
+        // Validate the data
+        if (!$name || !$description || !$categoryId) {
+            return $this->json(['error' => 'Invalid input data'], 400);
         }
 
+        // Find the category in the database
+        $category = $entityManager->getRepository(Category::class)->find($categoryId);
+
+        if (!$category) {
+            return $this->json(['error' => 'Category not found'], 404);
+        }
+
+        // Create a new Piece entity
         $piece = new Piece();
         $piece->setName($name);
         $piece->setDescription($description);
         $piece->setCategory($category);
+
+        // Persist and flush the new entity
         $entityManager->persist($piece);
         $entityManager->flush();
 
-        return $this->json($piece);
+        // Return the newly created piece as a JSON response
+        return $this->json($piece, 201);
     }
 
     #[Route('/piece/delete', name: 'delete_piece')]
     public function deletePiece(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
-        $id = $request->request->get('id');
+        $data = json_decode($request->getContent(), true);
 
-        if (!$id) {
-            return $this->json(['error' => 'Se requiere el parámetro "id" para eliminar la pieza'], 400);
+        // Verificar si se proporcionó un ID de publicación válido en el JSON
+        if (!isset($data['id'])) {
+            return new JsonResponse(['error' => 'ID de la publicación no proporcionado en el JSON'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        $piece = $entityManager->getRepository(Piece::class)->find($id);
+        // Obtener el ID de la publicación del JSON
+        $pieceId = $data['id'];
+
+        $piece = $entityManager->getRepository(Piece::class)->find($pieceId);
         if (!$piece) {
             return $this->json(['error' => 'Pieza no encontrada'], 404);
         }
