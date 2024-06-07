@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form, Button, Row, Col, Card, FloatingLabel, InputGroup, Image } from "react-bootstrap";
+import { Container, Form, Button, Row, Col, Card, FloatingLabel, InputGroup, Image, Spinner } from "react-bootstrap";
 import { Envelope, Person, Lock, Eye, EyeSlash, CheckCircle } from 'react-bootstrap-icons';
 import { registerUser, loginUser, saveUserSession } from "./userUtils";
 import './css/Register.css'; // Archivo CSS para estilos personalizados
@@ -20,6 +20,7 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Fetch images from localhost:8000
@@ -79,6 +80,8 @@ const Register = () => {
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("email", formData.email);
@@ -100,6 +103,8 @@ const Register = () => {
       window.location.href = "/";
     } catch (error) {
       console.error("Error:", error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -191,15 +196,6 @@ const Register = () => {
                   <p className="text-danger">Passwords do not match.</p>
                 )}
 
-                <Form.Group controlId="formFile" className="mb-3">
-                  <Form.Label>Add an Avatar picture</Form.Label>
-                  <Form.Control
-                    type="file"
-                    name="avatar"
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-
                 <Form.Group controlId="avatarSelection" className="mb-3">
                   <Form.Label>Select an Avatar from gallery</Form.Label>
                   <Container className="d-flex flex-wrap" fluid style={{ maxHeight: "35vh", overflowX: "auto" }}>
@@ -225,8 +221,8 @@ const Register = () => {
                   </Container>
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
-                  Submit
+                <Button variant="primary" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? <Spinner animation="border" size="sm" /> : "Submit"}
                 </Button>
               </Form>
             </Card.Body>
