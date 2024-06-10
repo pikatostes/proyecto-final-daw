@@ -6,11 +6,13 @@ import { CartPlus } from "react-bootstrap-icons";
 import ThreePointsButton from "./ThreePointsButton";
 import { deletePiece } from "./pieceUtils";
 import PieceForm from "../components/admin/piece/PieceForm";
+import PieceDetailsAccordion from "./PieceDetailsAccordion";
 
 const Inventory = ({ pieces }) => {
   const [selectedPieceData, setSelectedPieceData] = useState(null);
   const [showPieceFormModal, setShowPieceFormModal] = useState(false);
   const [showPieceOptionsModal, setShowPieceOptionsModal] = useState(false);
+  const [showPieceEditModal, setShowPieceEditModal] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
 
   const handleAddToCart = (pieceData) => {
@@ -19,7 +21,8 @@ const Inventory = ({ pieces }) => {
   };
 
   const handleEditPiece = (pieceData) => {
-    console.log("editing piece:", pieceData);
+    setSelectedPieceData(pieceData);
+    setShowPieceEditModal(true);
   };
 
   const handleDeletePiece = (pieceData) => {
@@ -107,6 +110,28 @@ const Inventory = ({ pieces }) => {
           <Button
             variant="secondary"
             onClick={() => setShowPieceFormModal(false)}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showPieceEditModal}
+        onHide={() => setShowPieceEditModal(false)}
+        size="xl"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Piece</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <PieceDetailsAccordion piece={selectedPieceData} onSave={() => setShowPieceEditModal(false)}/>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowPieceEditModal(false)}
           >
             Close
           </Button>

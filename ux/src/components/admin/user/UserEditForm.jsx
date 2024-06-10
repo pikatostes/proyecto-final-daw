@@ -14,8 +14,6 @@ const UserEditForm = ({ userData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(userData.avatar);
   const [images, setImages] = useState({});
 
-  console.log(formData);
-
   useEffect(() => {
     fetch("http://localhost:8000/images")
       .then((response) => response.json())

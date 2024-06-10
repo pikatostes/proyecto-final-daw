@@ -161,7 +161,6 @@ export const createPostCategory = async (categoryData) => {
 };
 
 export const updatePostCategory = async (category) => {
-  console.log(category)
   try {
     const formData = new FormData();
     formData.append("id", category.id);

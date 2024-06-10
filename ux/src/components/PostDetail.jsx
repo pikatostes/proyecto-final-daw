@@ -16,7 +16,6 @@ import { sendComment } from "./commentUtils"; // Importar la función sendCommen
 const PostDetail = ({ post, onClose }) => {
   const [comment, setComment] = useState(""); // Inicializamos el estado de comentario como una cadena vacía
   const [comments, setComments] = useState([]); // Estado para los comentarios
-console.log(post)
   const handleChange = (e) => {
     setComment(e.target.value); // Actualizamos el estado del comentario con el valor del textarea
   };

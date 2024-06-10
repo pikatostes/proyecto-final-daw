@@ -104,7 +104,6 @@ export const getImageNames = async () => {
 
 export const fetchUserDataUsingToken = () => {
   const token = localStorage.getItem("token"); // Assuming the token is stored in localStorage
-  console.log("getting token", token);
 
   if (!token) {
     // If no token, return null to signify that the user is not logged in

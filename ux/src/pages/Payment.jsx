@@ -87,7 +87,7 @@ const Payment = () => {
       const formData = {
         user_id: userId,
         total: totalPrice,
-        billing_address: selectedBillingInfo.id,
+        billing_address: selectedBillingInfo,
         piece_details: cartItems.map(item => ({
           id: item.id,
           quantity: item.quantity

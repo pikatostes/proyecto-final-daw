@@ -17,7 +17,6 @@ const Pieces = () => {
           throw new Error("Failed to fetch pieces");
         }
         const data = await response.json();
-        console.log("Fetched pieces:", data);
         setPieces(data);
       } catch (error) {
         console.error("Error fetching pieces:", error);
@@ -29,13 +28,11 @@ const Pieces = () => {
 
   const handleColorFilterChange = (filters) => {
     const colors = filters.map(filter => filter.name);
-    console.log("Selected colors:", colors);
     setSelectedColors(colors);
   };
 
   const handleCategoryFilterChange = (filters) => {
     const categories = filters.map(filter => filter.name);
-    console.log("Selected categories:", categories);
     setSelectedCategories(categories);
   };
 
@@ -46,11 +43,8 @@ const Pieces = () => {
   const filteredPieces = pieces.filter(piece => {
     const matchesColor = selectedColors.length === 0 || piece.colors.some(color => selectedColors.includes(color.name));
     const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(piece.category);
-    console.log(`Piece ${piece.name} matchesColor: ${matchesColor}, matchesCategory: ${matchesCategory}`);
     return matchesColor && matchesCategory;
   });
-
-  console.log("Filtered pieces:", filteredPieces);
 
   return (
     <div className="container-fluid">
