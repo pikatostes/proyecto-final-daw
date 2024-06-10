@@ -2,10 +2,7 @@ export const updateUser = async (formData) => {
   try {
     const response = await fetch("http://localhost:8000/admin/user/edit", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
+      body: formData,
     });
 
     if (!response.ok) {
@@ -16,6 +13,7 @@ export const updateUser = async (formData) => {
     throw error;
   }
 };
+
 
 export const deleteUser = async (userId) => {
   try {

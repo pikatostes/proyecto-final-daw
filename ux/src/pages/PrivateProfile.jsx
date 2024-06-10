@@ -5,6 +5,7 @@ import PostsList from "../components/PostsList";
 import UserComments from "../components/UserComments";
 import BillingInfo from "../components/BillingInfo";
 import PostCategory from "../components/PostCategory";
+import Orders from "../components/Orders";
 
 const ProfileV2 = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -51,7 +52,9 @@ const ProfileV2 = () => {
                   <Tab.Pane eventKey="billingInfo">
                     <BillingInfo />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="orders"></Tab.Pane>
+                  <Tab.Pane eventKey="orders">
+                    <Orders userId={user_id} />
+                  </Tab.Pane>
                 </Tab.Content>
               </Col>
             </Row>

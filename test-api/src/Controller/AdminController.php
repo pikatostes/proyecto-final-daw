@@ -67,8 +67,8 @@ class AdminController extends AbstractController
         $userId = $request->request->get('id');
         $username = $request->request->get('username');
         $roles = $request->request->get('roles');
-        $password = $request->request->get('password');
-        $avatarUrl = $request->request->get('avatar');
+        $avatar = $request->request->get('avatar');
+        $avatarUrl = $request->request->get('avatarUrl');
 
         // Verificar si se proporcionaron datos válidos
         if (!$userId) {
@@ -90,10 +90,11 @@ class AdminController extends AbstractController
         if ($roles !== null) {
             $user->setRoles(explode(',', $roles)); // Suponiendo que los roles se envían como una cadena separada por comas
         }
-        if ($password !== null) {
-            $user->setPassword($password); // Asegúrate de manejar correctamente el hash de la contraseña en producción
-        }
-        if ($avatarUrl !== null) {
+
+        // Actualizar el avatar
+        if ($avatar !== null) {
+            $user->setAvatar($avatar);
+        } else if ($avatarUrl !== null) {
             $imageContent = file_get_contents($avatarUrl);
             $imageMimeType = getimagesizefromstring($imageContent)['mime'];
             $avatarBase64 = base64_encode($imageContent);
