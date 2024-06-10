@@ -33,7 +33,6 @@ const FilterSelector = ({ title, endpoint, renderFilter, onFilterChange }) => {
     setFilters(updatedFilters);
     // Llama a la función onFilterChange pasando los filtros seleccionados
     const selectedFilters = updatedFilters.filter((filter) => filter.selected);
-    console.log(`[${title}] Selected filters:`, selectedFilters);
     onFilterChange(selectedFilters);
   };
 

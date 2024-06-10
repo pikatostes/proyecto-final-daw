@@ -28,6 +28,7 @@ const PieceOptions = ({ pieceData, onClose }) => {
     if (selectedColor) {
       const totalPrice = selectedColor.price * quantity;
       const newItem = {
+        id: pieceData.id,
         name: pieceData.name,
         color: selectedColor.name,
         quantity: quantity,

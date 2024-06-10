@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { fetchUserBillingInfo } from "../components/profileUtil";
 import { Trash } from "react-bootstrap-icons";
+import { createOrder } from "./orderUtils";
 
 const Payment = () => {
-  const [cartItems, setCartItems] = useState([]); // Estado local para almacenar los elementos del carrito
-  const [totalPrice, setTotalPrice] = useState(0); // Estado local para almacenar el precio total
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [cardInfo, setCardInfo] = useState({
     cardNumber: "",
     expirationDate: "",
@@ -15,14 +16,12 @@ const Payment = () => {
   const [selectedBillingInfo, setSelectedBillingInfo] = useState("");
 
   useEffect(() => {
-    // Obtener cartItems de la sesión cuando el componente se monta
     const sessionCartItems = JSON.parse(localStorage.getItem("cart"));
     if (sessionCartItems) {
       setCartItems(sessionCartItems);
       calculateTotalPrice(sessionCartItems);
     }
 
-    // Obtener las direcciones de facturación del usuario de la sesión
     const userSession = localStorage.getItem("user_id");
     if (userSession) {
       fetchUserBillingInfo(userSession)
@@ -50,9 +49,9 @@ const Payment = () => {
 
   const handleRemoveItem = (index) => {
     const updatedCartItems = [...cartItems];
-    updatedCartItems.splice(index, 1); // Eliminar el elemento del array
+    updatedCartItems.splice(index, 1);
     setCartItems(updatedCartItems);
-    localStorage.setItem("cart", JSON.stringify(updatedCartItems)); // Actualizar el carrito en la sesión
+    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
     calculateTotalPrice(updatedCartItems);
   };
 
@@ -82,10 +81,26 @@ const Payment = () => {
     });
   };
 
-  const handlePayment = () => {
-    // Aquí puedes procesar el pago con la información de la tarjeta
-    console.log("Payment processed with card info:", cardInfo);
-    console.log("Selected billing info:", selectedBillingInfo);
+  const handlePayment = async () => {
+    try {
+      const userId = localStorage.getItem("user_id");
+      const formData = {
+        user_id: userId,
+        total: totalPrice,
+        billing_address: selectedBillingInfo.id,
+        piece_details: cartItems.map(item => ({
+          id: item.id,
+          quantity: item.quantity
+        }))
+      };
+
+      const orderData = await createOrder(formData);
+      console.log("Order created:", orderData);
+      // Aquí puedes agregar lógica adicional para manejar el éxito del pago
+    } catch (error) {
+      console.error("Error processing payment:", error);
+      // Aquí puedes agregar lógica adicional para manejar el error del pago
+    }
   };
 
   const handleSelectChange = (e) => {

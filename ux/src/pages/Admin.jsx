@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Nav, Row, Tab, Button, Modal } from "react-bootstrap";
 import UserList from "../components/admin/user/UserList";
 import PostReportsList from "../components/admin/reports/PostReportsList";
@@ -17,6 +17,25 @@ const Admin = () => {
   const [showPieceFormModal, setShowPieceFormModal] = useState(false);
   const [showColorFormModal, setShowColorFormModal] = useState(false); // Estado para el modal del formulario de color
   const [selectedPieceData, setSelectedPieceData] = useState(null);
+  const [pieces, setPieces] = useState([]);
+
+  useEffect(() => {
+    const fetchPieces = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/piece");
+        if (!response.ok) {
+          throw new Error("Failed to fetch pieces");
+        }
+        const data = await response.json();
+        console.log("Fetched pieces:", data);
+        setPieces(data);
+      } catch (error) {
+        console.error("Error fetching pieces:", error);
+      }
+    };
+
+    fetchPieces();
+  }, []);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
@@ -109,7 +128,7 @@ const Admin = () => {
               >
                 New Color
               </Button>
-              <Inventory apiUrl={"http://localhost:8000/piece"}/>
+              <Inventory pieces={pieces}/>
             </Tab.Pane>
           </Tab.Content>
         </Col>

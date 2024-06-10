@@ -30,6 +30,12 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?BillingInfo $billingInfo = null;
 
+    #[ORM\Column]
+    private ?float $total = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
+
     public function __construct()
     {
         $this->piece_detail = new ArrayCollection();
@@ -96,6 +102,30 @@ class Order
     public function setBillingInfo(?BillingInfo $billingInfo): static
     {
         $this->billingInfo = $billingInfo;
+
+        return $this;
+    }
+
+    public function getTotal(): ?float
+    {
+        return $this->total;
+    }
+
+    public function setTotal(float $total): static
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

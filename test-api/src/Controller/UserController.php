@@ -88,7 +88,7 @@ class UserController extends AbstractController
         $username = $request->request->get('username');
         $email = $request->request->get('email');
         $password = $request->request->get('password');
-        $avatar = $request->files->get('avatar');
+        $avatar = $request->request->get('avatar');
 
         // Verificar si se proporcionaron los campos de usuario y contraseña
         if (!$username && !$email && !$password && !$avatar) {
@@ -116,8 +116,10 @@ class UserController extends AbstractController
 
         if ($avatar) {
             // Convertir la imagen a base64
-            $avatarBase64 = base64_encode(file_get_contents($avatar->getPathname()));
-            $avatarImage = 'data:' . $avatar->getClientMimeType() . ';base64,' . $avatarBase64;
+            $imageContent = file_get_contents($avatar);
+            $imageMimeType = getimagesizefromstring($imageContent)['mime'];
+            $avatarBase64 = base64_encode($imageContent);
+            $avatarImage = 'data:' . $imageMimeType . ';base64,' . $avatarBase64;
             $user->setAvatar($avatarImage);
             $isUpdated = true;
         }

@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Modal, Image, Col, Row } from "react-bootstrap";
 import AvatarGallery from "../../AvatarGallery";
+import { updateUser } from "./userAdminUtils";
 
 const UserEditForm = ({ userData, onClose }) => {
-  const [formData, setFormData] = useState(userData);
+  const [formData, setFormData] = useState({
+    id: userData.id,
+    username: userData.username,
+    roles: userData.roles,
+    avatar: userData.avatar,
+  });
   const [previewImage, setPreviewImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(userData.avatar);
   const [images, setImages] = useState({});
 
+  console.log(formData);
+
   useEffect(() => {
     fetch("http://localhost:8000/images")
-      .then(response => response.json())
-      .then(data => setImages(data))
-      .catch(error => console.error("Error fetching images:", error));
+      .then((response) => response.json())
+      .then((data) => setImages(data))
+      .catch((error) => console.error("Error fetching images:", error));
   }, []);
 
   const handleChange = (e) => {
@@ -22,6 +30,7 @@ const UserEditForm = ({ userData, onClose }) => {
       const reader = new FileReader();
       reader.onload = (e) => setPreviewImage(e.target.result);
       reader.readAsDataURL(file);
+      setFormData({ ...formData, avatar: file }); // Aquí asignamos el archivo
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -29,18 +38,33 @@ const UserEditForm = ({ userData, onClose }) => {
 
   const handleImageClick = (imageName) => {
     setSelectedImage(imageName);
-    setPreviewImage(`http://localhost:8000/images/${imageName}`);
-    setFormData({ ...formData, avatar: imageName });
+    const imageUrl = `http://localhost:8000/images/${imageName}`;
+    setPreviewImage(imageUrl);
+    setFormData({ ...formData, avatar: imageUrl }); // Aquí asignamos la URL
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formDataWithFile = new FormData();
-    formDataWithFile.append("avatar", selectedImage);
-    for (const key in formData) {
-      formDataWithFile.append(key, formData[key]);
+
+    // Verificamos si avatar es una URL o un archivo
+    if (
+      typeof formData.avatar === "string" &&
+      formData.avatar.startsWith("http")
+    ) {
+      formDataWithFile.append("avatarUrl", formData.avatar);
+    } else {
+      formDataWithFile.append("avatar", formData.avatar);
     }
-    console.log("Formulario enviado:", formDataWithFile);
+
+    for (const key in formData) {
+      if (key !== "avatar") {
+        // Ya hemos manejado avatar por separado
+        formDataWithFile.append(key, formData[key]);
+      }
+    }
+
+    updateUser(formDataWithFile);
     onClose();
   };
 
@@ -94,9 +118,9 @@ const UserEditForm = ({ userData, onClose }) => {
             </Row>
           </Form.Group>
           <AvatarGallery
-            images={images} 
-            selectedImage={selectedImage} 
-            handleImageClick={handleImageClick} 
+            images={images}
+            selectedImage={selectedImage}
+            handleImageClick={handleImageClick}
           />
           <Button variant="primary" type="submit">
             Guardar Cambios
