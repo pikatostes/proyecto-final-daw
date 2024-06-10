@@ -112,16 +112,13 @@ class AdminController extends AbstractController
     #[Route('/user/delete', name: 'user_delete')]
     public function userDelete(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): JsonResponse
     {
-        // Obtener el JSON de la solicitud POST
-        $jsonData = json_decode($request->getContent(), true);
+        // Obtener los datos del formulario
+        $userId = $request->request->get('id');
 
         // Verificar si se proporcionaron datos válidos
-        if (!$jsonData || !isset($jsonData['id']) || empty($jsonData['id'])) {
+        if (!$userId) {
             return new JsonResponse(['error' => 'Datos no válidos'], JsonResponse::HTTP_BAD_REQUEST);
         }
-
-        // Obtener el ID del usuario a eliminar
-        $userId = $jsonData['id'];
 
         // Buscar el usuario en la base de datos
         $user = $userRepository->find($userId);
@@ -131,11 +128,40 @@ class AdminController extends AbstractController
             return new JsonResponse(['error' => 'Usuario no encontrado'], JsonResponse::HTTP_NOT_FOUND);
         }
 
+        foreach ($user->getPostReports() as $postReports) {
+            $entityManager->remove($postReports);
+        }
+
+        foreach ($user->getCommentReports() as $commentReports) {
+            $entityManager->remove($commentReports);
+        }
+
+        foreach ($user->getComments() as $comment) {
+            $entityManager->remove($comment);
+        }
+
+        // foreach ($user->getPosts() as $post) {
+        //     $entityManager->remove($post);
+        // }
+
+        // Eliminar todas las entidades relacionadas manualmente, si no están configuradas para borrado en cascada
+        foreach ($user->getOrders() as $order) {
+            $entityManager->remove($order);
+        }
+
+        foreach ($user->getBillingInfos() as $billingInfo) {
+            $entityManager->remove($billingInfo);
+        }
+
+        foreach ($user->getLikes() as $likes) {
+            $entityManager->remove($likes);
+        }
+
         // Eliminar el usuario de la base de datos
         $entityManager->remove($user);
         $entityManager->flush();
 
-        // Devolver una respuesta JSON de èxito
+        // Devolver una respuesta JSON de éxito
         return new JsonResponse(['success' => 'Usuario eliminado correctamente']);
     }
 }

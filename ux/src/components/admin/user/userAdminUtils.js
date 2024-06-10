@@ -14,16 +14,16 @@ export const updateUser = async (formData) => {
   }
 };
 
-
 export const deleteUser = async (userId) => {
   try {
-    const data = { id: userId };
+    const formData = new FormData();
+    formData.append("id", userId);
     const response = await fetch("http://localhost:8000/admin/user/delete", {
-      method: "DELETE",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: formData,
     });
 
     if (!response.ok) {
