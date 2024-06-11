@@ -108,6 +108,7 @@ export const fetchUserDataUsingToken = () => {
   if (!token) {
     // If no token, return null to signify that the user is not logged in
     console.log("no token")
+    logoutUser();
     return null;
   }
 

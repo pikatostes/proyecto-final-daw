@@ -48,7 +48,7 @@ const Inventory = ({ pieces }) => {
       <Row>
         {pieces.map((piece) => (
           <Col key={piece.id} xs={6} sm={6} md={3} lg={2} className="mb-4">
-            <Card style={{ minHeight: "" }}>
+            <Card>
               <Row>
                 <Col xs={12} md={12}>
                   <ColorCarousel colors={piece.colors} />
@@ -126,7 +126,7 @@ const Inventory = ({ pieces }) => {
           <Modal.Title>Edit Piece</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <PieceDetailsAccordion piece={selectedPieceData} onSave={() => setShowPieceEditModal(false)}/>
+          <PieceDetailsAccordion piece={selectedPieceData} onSave={() => setShowPieceEditModal(false)} />
         </Modal.Body>
         <Modal.Footer>
           <Button

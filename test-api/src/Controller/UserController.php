@@ -129,7 +129,7 @@ class UserController extends AbstractController
             $this->entityManager->flush();
 
             // Enviar correo electrónico
-            $this->sendEmail($user->getEmail());
+            $this->sendEmail($email, $username, $avatarImage);
 
             // Devolver una respuesta JSON indicando que los datos se han actualizado
             return new JsonResponse(['message' => 'User data updated successfully'], Response::HTTP_OK);
@@ -305,13 +305,19 @@ class UserController extends AbstractController
         return new JsonResponse($formattedCategories, JsonResponse::HTTP_OK);
     }
 
-    private function sendEmail(string $emailAddress): void
+    private function sendEmail(string $emailAddress, string $username, string $avatarImage): void
     {
         $email = (new Email())
             ->from('brickpoint.daw@gmail.com')
             ->to($emailAddress)
-            ->subject('User Info updated successfully!')
-            ->text('Your data has been successfully updated');
+            ->subject('Actualización de Perfil')
+            ->html($this->renderView('email/update.html.twig', [
+                'title' => 'Actualización de Perfil',
+                'message' => 'This is a test email sent from Symfony Mailer using Gmail.',
+                'username' => $username,
+                'userAvatar' => $avatarImage
+            ]));
+
         $this->mailerInterface->send($email);
     }
 }
