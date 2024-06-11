@@ -14,6 +14,7 @@ import Admin from "./pages/Admin";
 import Payment from "./pages/Payment";
 import PublicProfile from "./pages/PublicProfile";
 import CategoryIndex from "./pages/CategoryIndex";
+import FooterComponent from "./FooterComponent";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
         <Route path="*" element={<Error404 />} />
         {/* Agrega más rutas aquí según sea necesario */}
       </Routes>
+      <FooterComponent />
     </BrowserRouter>
   );
 };
