@@ -47,6 +47,7 @@ export const logoutUser = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user_role");
   localStorage.removeItem("userData");
+  localStorage.clear();
   console.log("log out done")
 };
 
