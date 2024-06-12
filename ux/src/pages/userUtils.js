@@ -20,12 +20,14 @@ export const loginUser = async (formData) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to login");
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Failed to login");
   }
 
   const data = await response.json();
   return data;
 };
+
 
 export const saveUserSession = (data) => {
   const userSession = data.user;

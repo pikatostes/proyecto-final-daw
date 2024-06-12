@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Button, Row, Col, Modal } from "react-bootstrap";
+import { Card, Button, Row, Col, Modal, Container } from "react-bootstrap";
 import ColorCarousel from "./ColorCarousel";
 import PieceOptions from "./PieceOptions";
 import { CartPlus } from "react-bootstrap-icons";
@@ -44,7 +44,7 @@ const Inventory = ({ pieces }) => {
   }
 
   return (
-    <div style={{ position: "relative" }}>
+    <Container style={{ position: "relative" }} fluid className="vh-100">
       <Row>
         {pieces.map((piece) => (
           <Col key={piece.id} xs={6} sm={6} md={3} lg={2} className="mb-4">
@@ -144,7 +144,7 @@ const Inventory = ({ pieces }) => {
           onClose={handleClosePieceOptions}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

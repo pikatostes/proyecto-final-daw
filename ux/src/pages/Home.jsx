@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Button,
   Card,
   Col,
   Container,
@@ -10,6 +11,7 @@ import {
 import CarouselComponent from "../components/Carousel";
 import Minifigures from "../assets/minifigures.webp";
 import LegoIcon from "../assets/lego-icon.webp";
+import { BagFill, People, PeopleFill } from "react-bootstrap-icons";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -42,16 +44,37 @@ const Home = () => {
       style={{ minHeight: "100vh" }}
       data-bs-theme="dark"
     >
-      <h2>Welcome to BrickPoint!</h2>
-      <h3>
-        Your <Image src={LegoIcon} alt="Lego Icon" rounded height={35} /> pieces
-        shop and forum
-      </h3>
       {/* <CarouselComponent carouselSize="carousel-md" imageSizes={imageSizes} /> */}
       <Row className="align-items-center">
         <Col xs={12}>
+          <h2>Welcome to BrickPoint!</h2>
+          <h3>
+            Your <Image src={LegoIcon} alt="Lego Icon" rounded height={35} />{" "}
+            pieces shop and forum
+          </h3>
+        </Col>
+        <Col xs={12} md={6}>
           <Image src={Minifigures} alt="Minifigures" fluid />
         </Col>
+        <Col xs={12} md={6}>
+          <Row className="align-items-center justify-content-center w-100 mt-4 mb-4">
+            <Col xs={12}>
+              <h3>Start exploring our website!</h3>
+            </Col>
+            <Col xs={6}>
+              <Button variant="primary" size="lg" href="/pieces">
+                <BagFill /> Shop
+              </Button>
+            </Col>
+            <Col xs={6}>
+              <Button variant="primary" size="lg" href="/post">
+                <PeopleFill /> Forum
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      <Row className="align-items-center">
         <Col xs={12}>
           <h3>Best Creations</h3>
           {loading ? (

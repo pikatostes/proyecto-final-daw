@@ -16,6 +16,7 @@ import { sendComment } from "./commentUtils"; // Importar la función sendCommen
 const PostDetail = ({ post, onClose }) => {
   const [comment, setComment] = useState(""); // Inicializamos el estado de comentario como una cadena vacía
   const [comments, setComments] = useState([]); // Estado para los comentarios
+  const userData = localStorage.getItem("userData");
   const handleChange = (e) => {
     setComment(e.target.value); // Actualizamos el estado del comentario con el valor del textarea
   };
@@ -72,7 +73,8 @@ const PostDetail = ({ post, onClose }) => {
               <p>{post.description}</p>
             </Col>
             <Col xs={12} md={6}>
-              <InputGroup>
+              {userData && (
+                <InputGroup>
                 <Form.Control
                   as="textarea"
                   rows={1}
@@ -83,6 +85,7 @@ const PostDetail = ({ post, onClose }) => {
                   <ChatFill />
                 </Button>
               </InputGroup>
+              )}
               <br />
               <PostComments post={post} comments={comments} setComments={setComments} />
             </Col>

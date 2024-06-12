@@ -29,6 +29,7 @@ const Posts = () => {
   });
   const [loading, setLoading] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
+  const userData = localStorage.getItem("userData");
 
   useEffect(() => {
     if (searchQuery) {
@@ -146,18 +147,20 @@ const Posts = () => {
       </Row>
 
       {/* Botón flotante */}
-      <Button
-        variant="primary"
-        onClick={handleShowModal}
-        style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          zIndex: "1", // Asegura que esté por encima de otros elementos
-        }}
-      >
-        <PencilSquare /> New Post
-      </Button>
+      {userData && (
+        <Button
+          variant="primary"
+          onClick={handleShowModal}
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            zIndex: "1", // Asegura que esté por encima de otros elementos
+          }}
+        >
+          <PencilSquare /> New Post
+        </Button>
+      )}
 
       <PostForm
         show={showModal}

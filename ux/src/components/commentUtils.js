@@ -92,7 +92,7 @@ export const handleDeleteComment = async (commentId, userComments, setUserCommen
 export const editComment = async (commentId, newText) => {
   try {
     const response = await fetch(`http://localhost:8000/comment/edit`, {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },

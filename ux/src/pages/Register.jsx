@@ -10,6 +10,7 @@ import {
   InputGroup,
   Image,
   Spinner,
+  Alert,
 } from "react-bootstrap";
 import {
   Envelope,
@@ -22,7 +23,7 @@ import {
 import { registerUser, loginUser, saveUserSession } from "./userUtils";
 import "./css/Register.css"; // Archivo CSS para estilos personalizados
 
-const Register = (admin) => {
+const Register = ({ admin }) => {
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -39,6 +40,7 @@ const Register = (admin) => {
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     // Fetch images from localhost:8000
@@ -103,6 +105,7 @@ const Register = (admin) => {
     }
 
     setIsSubmitting(true);
+    setError(null); // Clear previous errors
 
     try {
       const formDataToSend = new FormData();
@@ -130,19 +133,20 @@ const Register = (admin) => {
 
       // Redirigir al usuario a la página principal
     } catch (error) {
-      console.error("Error:", error.message);
+      setError(error.message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Container className="mt-5">
+    <Container className="mt-5 vh-100">
       <Row className="justify-content-center">
         <Col md={6}>
           <Card>
             <Card.Body>
               <Card.Title className="text-center">Register</Card.Title>
+              {error && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={handleSubmit}>
                 <InputGroup className="mb-3">
                   <InputGroup.Text>

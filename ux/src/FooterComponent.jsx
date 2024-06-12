@@ -13,8 +13,8 @@ const FooterComponent = () => {
       style={{ color: "white" }}
     >
       <Container fluid>
-        <Row className="w-100">
-          <Col>
+        <Row className="align-items-center w-100">
+          <Col xs={12} className="text-center">
             <h5>Contact Us</h5>
             <Nav className="flex-column">
               <Nav.Link
@@ -25,13 +25,11 @@ const FooterComponent = () => {
               </Nav.Link>
             </Nav>
           </Col>
-        </Row>
-
-        <Row className="mt-2 w-100">
-          <Col className="text-center">
+          <Col xs={12} className="text-center">
             <p>
               Created by Alejandro Rios as the final project for DAW. Check out
               the source code on{" "}
+              <br />
               <a
                 href="https://github.com/pikatostes/proyecto-final-daw"
                 className="text-light"
@@ -41,9 +39,7 @@ const FooterComponent = () => {
               .
             </p>
           </Col>
-        </Row>
-        <Row className="mt-3 w-100">
-          <Col className="text-center">
+          <Col xs={12} className="text-center">
             &copy; 2023 Brickpoint. All Rights Reserved.
           </Col>
         </Row>

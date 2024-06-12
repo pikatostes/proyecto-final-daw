@@ -108,7 +108,7 @@ const Payment = () => {
   };
 
   return (
-    <Container>
+    <Container className="vh-100">
       <Row className="align-items-center justify-content-center">
         <Col xs={12} md={6}>
           {cartItems && cartItems.length === 0 ? (
