@@ -130,7 +130,7 @@ class PostController extends AbstractController
         return new Response('Post created successfully', Response::HTTP_OK);
     }
 
-    #[Route('/update/{id}', name: 'update_post', methods: ['PATCH'])]
+    #[Route('/update/{id}', name: 'update_post')]
     public function updatePost(int $id, Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository): JsonResponse
     {
         // Encontrar el post correspondiente
@@ -174,7 +174,7 @@ class PostController extends AbstractController
         }
 
         if ($isUpdated) {
-            $post->setUpdatedAt(new \DateTime());
+            $post->setUpdatedAt(new DateTime());
             $entityManager->persist($post);
             $entityManager->flush();
 

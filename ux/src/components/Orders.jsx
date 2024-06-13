@@ -4,11 +4,14 @@ import { getOrders } from "../pages/orderUtils";
 
 const Orders = ({ userId }) => {
   const [orders, setOrders] = useState([]);
+  const formData = {
+    user_id: userId,
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const ordersData = await getOrders(userId);
+        const ordersData = await getOrders(formData);
         setOrders(ordersData);
       } catch (error) {
         console.error("Error fetching orders:", error);

@@ -87,7 +87,7 @@ const Payment = () => {
       const formData = {
         user_id: userId,
         total: totalPrice,
-        billing_address: selectedBillingInfo.id,
+        billing_address: selectedBillingInfo,
         piece_details: cartItems.map(item => ({
           id: item.id,
           quantity: item.quantity
@@ -108,7 +108,7 @@ const Payment = () => {
   };
 
   return (
-    <Container>
+    <Container className="vh-100">
       <Row className="align-items-center justify-content-center">
         <Col xs={12} md={6}>
           {cartItems && cartItems.length === 0 ? (

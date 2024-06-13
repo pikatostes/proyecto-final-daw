@@ -27,7 +27,6 @@ const Admin = () => {
           throw new Error("Failed to fetch pieces");
         }
         const data = await response.json();
-        console.log("Fetched pieces:", data);
         setPieces(data);
       } catch (error) {
         console.error("Error fetching pieces:", error);
@@ -143,7 +142,7 @@ const Admin = () => {
           <Modal.Title>Register New User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Register />
+          <Register admin={true}/>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseRegisterModal}>

@@ -23,8 +23,6 @@ const CategoryIndex = () => {
     fetchCategories();
   }, []);
 
-  console.log(categories);
-
   return (
     <Container className="text-center">
       <h2>BrickPoint Creations</h2>

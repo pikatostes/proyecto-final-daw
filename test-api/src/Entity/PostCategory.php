@@ -21,7 +21,7 @@ class PostCategory
     #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'category')]
     private Collection $posts;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 1000000)]
     private ?string $image = null;
 
     public function __construct()

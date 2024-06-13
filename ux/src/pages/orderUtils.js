@@ -1,5 +1,4 @@
 export const createOrder = async (formData) => {
-  console.log(formData);
   try {
     const response = await fetch("http://localhost:8000/order/create", {
       method: "POST",
@@ -21,14 +20,14 @@ export const createOrder = async (formData) => {
   }
 };
 
-export const getOrders = async (userId) => {
+export const getOrders = async (formData) => {
   try {
     const response = await fetch(`http://localhost:8000/order/get`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user_id: userId }),
+      body: JSON.stringify(formData),
     });
 
     if (!response.ok) {

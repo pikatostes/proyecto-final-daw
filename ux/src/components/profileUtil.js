@@ -19,10 +19,6 @@ export const updateUserDetails = async (userId, username, email, avatar) => {
     formData.append("email", email);
     formData.append("avatar", `http://localhost:8000/images/${avatar}`);
 
-    for(const pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
-
     const response = await fetch(
       `http://localhost:8000/user/${userId}/update`,
       {

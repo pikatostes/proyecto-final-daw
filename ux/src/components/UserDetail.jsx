@@ -101,8 +101,8 @@ const UserDetail = () => {
                   value={email}
                   onChange={handleEmailChange}
                 />
-                <Form.Label>Change Avatar</Form.Label>
-                <Form.Control type="file" onChange={handleAvatarChange} />
+                {/* <Form.Label>Change Avatar</Form.Label>
+                <Form.Control type="file" onChange={handleAvatarChange} /> */}
               </Form.Group>
               <AvatarGallery
                 images={images}

@@ -35,6 +35,7 @@ class PieceController extends AbstractController
             $colors = [];
             foreach ($piece->getPieceDetails() as $pieceDetail) {
                 $colors[] = [
+                    'id' => $pieceDetail->getColor()->getId(),
                     'name' => $pieceDetail->getColor()->getName(),
                     'price' => $pieceDetail->getPrice(),
                     'stock' => $pieceDetail->getStock(),
@@ -69,6 +70,7 @@ class PieceController extends AbstractController
             $colors = [];
             foreach ($piece->getPieceDetails() as $pieceDetail) {
                 $colors[] = [
+                    'id' => $pieceDetail->getColor()->getId(),
                     'name' => $pieceDetail->getColor()->getName(),
                     'price' => $pieceDetail->getPrice(),
                     'stock' => $pieceDetail->getStock(),

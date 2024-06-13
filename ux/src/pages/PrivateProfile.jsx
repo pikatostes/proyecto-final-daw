@@ -20,7 +20,7 @@ const ProfileV2 = () => {
   };
 
   return (
-    <Container>
+    <Container className="vh-100">
       <Tabs
         defaultActiveKey="profile"
         id="fill-tab-example"

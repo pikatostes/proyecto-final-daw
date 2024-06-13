@@ -1,10 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form, Button, Row, Col, Card, FloatingLabel, InputGroup, Image, Spinner } from "react-bootstrap";
-import { Envelope, Person, Lock, Eye, EyeSlash, CheckCircle } from 'react-bootstrap-icons';
+import {
+  Container,
+  Form,
+  Button,
+  Row,
+  Col,
+  Card,
+  FloatingLabel,
+  InputGroup,
+  Image,
+  Spinner,
+  Alert,
+} from "react-bootstrap";
+import {
+  Envelope,
+  Person,
+  Lock,
+  Eye,
+  EyeSlash,
+  CheckCircle,
+} from "react-bootstrap-icons";
 import { registerUser, loginUser, saveUserSession } from "./userUtils";
-import './css/Register.css'; // Archivo CSS para estilos personalizados
+import "./css/Register.css"; // Archivo CSS para estilos personalizados
 
-const Register = () => {
+const Register = ({ admin }) => {
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -21,6 +40,7 @@ const Register = () => {
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     // Fetch images from localhost:8000
@@ -57,10 +77,14 @@ const Register = () => {
 
   const validatePassword = (password) => {
     const errors = [];
-    if (password.length < 6) errors.push("Password must be at least 6 characters long.");
-    if (!/[A-Z]/.test(password)) errors.push("Password must contain at least one uppercase letter.");
-    if (!/[0-9]/.test(password)) errors.push("Password must contain at least one number.");
-    if (!/[!@#$%^&*]/.test(password)) errors.push("Password must contain at least one special character.");
+    if (password.length < 6)
+      errors.push("Password must be at least 6 characters long.");
+    if (!/[A-Z]/.test(password))
+      errors.push("Password must contain at least one uppercase letter.");
+    if (!/[0-9]/.test(password))
+      errors.push("Password must contain at least one number.");
+    if (!/[!@#$%^&*]/.test(password))
+      errors.push("Password must contain at least one special character.");
     setPasswordErrors(errors);
     setPasswordValid(errors.length === 0);
   };
@@ -81,6 +105,7 @@ const Register = () => {
     }
 
     setIsSubmitting(true);
+    setError(null); // Clear previous errors
 
     try {
       const formDataToSend = new FormData();
@@ -90,31 +115,38 @@ const Register = () => {
       if (formData.avatar instanceof File) {
         formDataToSend.append("avatar", formData.avatar);
       } else {
-        formDataToSend.append("avatarUrl", `http://localhost:8000/images/${formData.avatar}`);
+        formDataToSend.append(
+          "avatarUrl",
+          `http://localhost:8000/images/${formData.avatar}`
+        );
       }
 
       await registerUser(formDataToSend);
 
-      const data = await loginUser(formData);
-
-      saveUserSession(data);
+      if (!admin) {
+        const data = await loginUser(formData);
+        saveUserSession(data);
+        window.location.href = "/";
+      } else {
+        window.location.href = "/admin";
+      }
 
       // Redirigir al usuario a la página principal
-      window.location.href = "/";
     } catch (error) {
-      console.error("Error:", error.message);
+      setError(error.message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Container className="mt-5">
+    <Container className="mt-5 vh-100">
       <Row className="justify-content-center">
         <Col md={6}>
           <Card>
             <Card.Body>
               <Card.Title className="text-center">Register</Card.Title>
+              {error && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={handleSubmit}>
                 <InputGroup className="mb-3">
                   <InputGroup.Text>
@@ -147,7 +179,9 @@ const Register = () => {
                 </InputGroup>
 
                 <InputGroup className="mb-3">
-                  <InputGroup.Text className={passwordValid ? 'text-success' : ''}>
+                  <InputGroup.Text
+                    className={passwordValid ? "text-success" : ""}
+                  >
                     <Lock />
                   </InputGroup.Text>
                   <FloatingLabel controlId="formBasicPassword" label="Password">
@@ -157,29 +191,48 @@ const Register = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className={passwordValid ? 'is-valid' : ''}
+                      className={passwordValid ? "is-valid" : ""}
                     />
                   </FloatingLabel>
-                  <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
                     {showPassword ? <EyeSlash /> : <Eye />}
                   </Button>
                 </InputGroup>
 
                 <InputGroup className="mb-3">
-                  <InputGroup.Text className={!passwordMatchError && formData.confirmPassword ? 'text-success' : ''}>
+                  <InputGroup.Text
+                    className={
+                      !passwordMatchError && formData.confirmPassword
+                        ? "text-success"
+                        : ""
+                    }
+                  >
                     <Lock />
                   </InputGroup.Text>
-                  <FloatingLabel controlId="formConfirmPassword" label="Confirm Password">
+                  <FloatingLabel
+                    controlId="formConfirmPassword"
+                    label="Confirm Password"
+                  >
                     <Form.Control
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm Password"
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className={!passwordMatchError && formData.confirmPassword ? 'is-valid' : ''}
+                      className={
+                        !passwordMatchError && formData.confirmPassword
+                          ? "is-valid"
+                          : ""
+                      }
                     />
                   </FloatingLabel>
-                  <Button variant="outline-secondary" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
                     {showConfirmPassword ? <EyeSlash /> : <Eye />}
                   </Button>
                 </InputGroup>
@@ -198,14 +251,21 @@ const Register = () => {
 
                 <Form.Group controlId="avatarSelection" className="mb-3">
                   <Form.Label>Select an Avatar from gallery</Form.Label>
-                  <Container className="d-flex flex-wrap" fluid style={{ maxHeight: "35vh", overflowX: "auto" }}>
+                  <Container
+                    className="d-flex flex-wrap"
+                    fluid
+                    style={{ maxHeight: "35vh", overflowX: "auto" }}
+                  >
                     {Object.entries(images).map(([key, imageName]) => (
                       <div key={key} className="position-relative m-1">
                         <Image
                           roundedCircle
                           src={`http://localhost:8000/images/${imageName}`}
                           onClick={() => handleImageClick(imageName)}
-                          style={{ cursor: "pointer", opacity: selectedImage === imageName ? 0.5 : 1 }}
+                          style={{
+                            cursor: "pointer",
+                            opacity: selectedImage === imageName ? 0.5 : 1,
+                          }}
                           width={63}
                           fluid
                           className="image-gallery"
@@ -222,7 +282,11 @@ const Register = () => {
                 </Form.Group>
 
                 <Button variant="primary" type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? <Spinner animation="border" size="sm" /> : "Submit"}
+                  {isSubmitting ? (
+                    <Spinner animation="border" size="sm" />
+                  ) : (
+                    "Submit"
+                  )}
                 </Button>
               </Form>
             </Card.Body>
