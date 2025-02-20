@@ -1,6 +1,6 @@
 export const createOrder = async (formData) => {
   try {
-    const response = await fetch("http://localhost:8000/order/create", {
+    const response = await fetch(import.meta.env.VITE_API_URL + "/order/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export const createOrder = async (formData) => {
 
 export const getOrders = async (formData) => {
   try {
-    const response = await fetch(`http://localhost:8000/order/get`, {
+    const response = await fetch(import.meta.env.VITE_API_URL + `/order/get`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

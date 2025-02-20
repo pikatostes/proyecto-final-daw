@@ -96,13 +96,8 @@ export const handleDeleteComment = async (commentId, userComments, setUserCommen
 
 export const editComment = async (commentId, newText) => {
   try {
-<<<<<<< HEAD
     const response = await fetch(import.meta.env.VITE_API_URL + `/comment/edit`, {
       method: "PUT",
-=======
-    const response = await fetch(`http://localhost:8000/comment/edit`, {
-      method: "POST",
->>>>>>> 8829acdc65f948c75a6fbfd5366b86948bb9b779
       headers: {
         "Content-Type": "application/json",
       },

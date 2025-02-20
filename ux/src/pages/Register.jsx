@@ -115,14 +115,10 @@ const Register = ({ admin }) => {
       if (formData.avatar instanceof File) {
         formDataToSend.append("avatar", formData.avatar);
       } else {
-<<<<<<< HEAD
-        formDataToSend.append("avatarUrl", import.meta.env.VITE_API_URL + `/images/${formData.avatar}`);
-=======
         formDataToSend.append(
           "avatarUrl",
-          `http://localhost:8000/images/${formData.avatar}`
+          import.meta.env.VITE_API_URL + `/images/${formData.avatar}`
         );
->>>>>>> 8829acdc65f948c75a6fbfd5366b86948bb9b779
       }
 
       await registerUser(formDataToSend);

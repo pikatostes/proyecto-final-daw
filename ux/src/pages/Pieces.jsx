@@ -19,7 +19,7 @@ const Pieces = () => {
         const response = await fetch(import.meta.env.VITE_API_URL + "/piece/shop");
 =======
         setLoading(true);
-        const response = await fetch("http://localhost:8000/piece/shop");
+        const response = await fetch(import.meta.env.VITE_API_URL + "/piece/shop");
 >>>>>>> 8829acdc65f948c75a6fbfd5366b86948bb9b779
         if (!response.ok) {
           throw new Error("Failed to fetch pieces");

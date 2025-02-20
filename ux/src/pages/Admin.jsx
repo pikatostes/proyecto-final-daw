@@ -22,7 +22,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchPieces = async () => {
       try {
-        const response = await fetch("http://localhost:8000/piece");
+        const response = await fetch(import.meta.env.VITE_API_URL + "/piece");
         if (!response.ok) {
           throw new Error("Failed to fetch pieces");
         }
@@ -127,11 +127,8 @@ const Admin = () => {
               >
                 New Color
               </Button>
-<<<<<<< HEAD
               <Inventory apiUrl={import.meta.env.VITE_API_URL + "/piece"}/>
-=======
               <Inventory pieces={pieces}/>
->>>>>>> 8829acdc65f948c75a6fbfd5366b86948bb9b779
             </Tab.Pane>
           </Tab.Content>
         </Col>

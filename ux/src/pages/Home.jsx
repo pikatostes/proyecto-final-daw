@@ -14,9 +14,7 @@ import LegoIcon from "../assets/lego-icon.webp";
 import { BagFill, People, PeopleFill } from "react-bootstrap-icons";
 
 const Home = () => {
-<<<<<<< HEAD
   console.log(localStorage.getItem("token"));
-=======
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -24,7 +22,7 @@ const Home = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch("http://localhost:8000/post/most-liked"); // Cambia esta URL por la correcta
+        const response = await fetch(import.meta.env.VITE_API_URL + "/post/most-liked"); // Cambia esta URL por la correcta
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -40,7 +38,6 @@ const Home = () => {
     fetchPosts();
   }, []);
 
->>>>>>> 8829acdc65f948c75a6fbfd5366b86948bb9b779
   return (
     <Container
       fluid

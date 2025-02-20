@@ -25,7 +25,7 @@ const PieceDetailsAccordion = ({ piece }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/piece/detail/delete",
+        import.meta.env.VITE_API_URL + "/piece/detail/delete",
         {
           method: "POST",
           body: formdata,
@@ -61,7 +61,7 @@ const PieceDetailsAccordion = ({ piece }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/piece/detail/update",
+        import.meta.env.VITE_API_URL + "/piece/detail/update",
         {
           method: "POST",
           body: formData,
