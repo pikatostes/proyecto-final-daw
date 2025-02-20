@@ -9,6 +9,7 @@ import {
   Spinner,
   InputGroup,
   FloatingLabel,
+  Alert
 } from "react-bootstrap";
 import { loginUser, saveUserSession } from "./userUtils";
 import { Eye, EyeSlash, Lock, Person } from "react-bootstrap-icons";
@@ -20,6 +21,7 @@ const Login = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -29,6 +31,7 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true); // Activar loading al enviar los datos
+    setError(null); // Limpiar errores previos
 
     try {
       const data = await loginUser(formData);
@@ -36,20 +39,20 @@ const Login = () => {
 
       // Redirigir al usuario a la página principal
       window.location.href = "/";
-      setIsLoading(false);
     } catch (error) {
-      console.error("Error:", error.message);
-    } finally {
+      setError(error.message);
       setIsLoading(false); // Desactivar loading después de completar
     }
   };
+
   return (
-    <Container className="mt-5">
+    <Container className="mt-5 vh-100">
       <Row className="justify-content-center">
         <Col md={6}>
           <Card>
             <Card.Body>
               <Card.Title className="text-center mb-4">Log In</Card.Title>
+              {error && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={handleSubmit} method="POST">
                 <InputGroup className="mb-3">
                   <InputGroup.Text>
@@ -83,6 +86,7 @@ const Login = () => {
                   <Button
                     variant="outline-secondary"
                     onClick={() => setShowPassword(!showPassword)}
+                    disabled={isLoading}
                   >
                     {showPassword ? <EyeSlash /> : <Eye />}
                   </Button>
@@ -110,3 +114,4 @@ const Login = () => {
 };
 
 export default Login;
+

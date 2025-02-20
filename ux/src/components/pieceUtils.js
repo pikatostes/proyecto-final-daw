@@ -1,7 +1,4 @@
 export const newPiece = async (formData) => {
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}: ${value}`);
-  }
   try {
     const response = await fetch(import.meta.env.VITE_API_URL + "/piece/new", {
       method: "POST",
@@ -18,7 +15,6 @@ export const newPiece = async (formData) => {
 };
 
 export const deletePiece = async (pieceId) => {
-  console.log("received id:", pieceId);
   try {
     const response = await fetch(import.meta.env.VITE_API_URL + `/piece/delete`, {
       method: "POST", // Cambiado de DELETE a POST
@@ -37,9 +33,6 @@ export const deletePiece = async (pieceId) => {
 };
 
 export const newPieceDetail = async (formData) => {
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}: ${value}`);
-  }
   try {
     const response = await fetch(import.meta.env.VITE_API_URL + "/piece/detail/new", {
       method: "POST",

@@ -53,7 +53,7 @@ const PublicProfile = () => {
   if (error) return <Alert variant="danger">{error}</Alert>;
 
   return (
-    <Container data-bs-theme="dark">
+    <Container data-bs-theme="dark" className="vh-100">
       <Row>
         <Col xs={12} md={3} className="mb-2">
           <UserDetailPublic userData={userData} />

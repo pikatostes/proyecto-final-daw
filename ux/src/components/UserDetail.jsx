@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Col, Form, Image, Row, Spinner, Button } from "react-bootstrap";
 import { fetchUserData, updateUserDetails } from "./profileUtil";
+import AvatarGallery from "./AvatarGallery";
 
 const UserDetail = () => {
   const [userData, setUserData] = useState(null);
@@ -9,6 +10,8 @@ const UserDetail = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState(null);
+  const [images, setImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const userSession = localStorage.getItem("user_id");
@@ -16,12 +19,28 @@ const UserDetail = () => {
       fetchUserData(userSession)
         .then((data) => {
           setUserData(data);
+          setUsername(data.username);
+          setEmail(data.email);
+          setAvatar(data.avatar);
           setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
           setLoading(false);
         });
+
+      // Fetch images from localhost:8000
+      const fetchImages = async () => {
+        try {
+          const response = await fetch("http://localhost:8000/images");
+          const data = await response.json();
+          setImages(data);
+        } catch (error) {
+          console.error("Error fetching images:", error);
+        }
+      };
+
+      fetchImages();
     }
   }, []);
 
@@ -35,6 +54,11 @@ const UserDetail = () => {
 
   const handleAvatarChange = (event) => {
     setAvatar(event.target.files[0]);
+  };
+
+  const handleImageClick = (imageName) => {
+    setAvatar(imageName);
+    setSelectedImage(imageName);
   };
 
   const handleSubmit = () => {
@@ -77,9 +101,14 @@ const UserDetail = () => {
                   value={email}
                   onChange={handleEmailChange}
                 />
-                <Form.Label>Change Avatar</Form.Label>
-                <Form.Control type="file" onChange={handleAvatarChange} />
+                {/* <Form.Label>Change Avatar</Form.Label>
+                <Form.Control type="file" onChange={handleAvatarChange} /> */}
               </Form.Group>
+              <AvatarGallery
+                images={images}
+                selectedImage={selectedImage}
+                handleImageClick={handleImageClick}
+              />
               <Button variant="primary" onClick={handleSubmit}>
                 Save Changes
               </Button>

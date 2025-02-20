@@ -88,7 +88,7 @@ class UserController extends AbstractController
         $username = $request->request->get('username');
         $email = $request->request->get('email');
         $password = $request->request->get('password');
-        $avatar = $request->files->get('avatar');
+        $avatar = $request->request->get('avatar');
 
         // Verificar si se proporcionaron los campos de usuario y contraseña
         if (!$username && !$email && !$password && !$avatar) {
@@ -116,8 +116,10 @@ class UserController extends AbstractController
 
         if ($avatar) {
             // Convertir la imagen a base64
-            $avatarBase64 = base64_encode(file_get_contents($avatar->getPathname()));
-            $avatarImage = 'data:' . $avatar->getClientMimeType() . ';base64,' . $avatarBase64;
+            $imageContent = file_get_contents($avatar);
+            $imageMimeType = getimagesizefromstring($imageContent)['mime'];
+            $avatarBase64 = base64_encode($imageContent);
+            $avatarImage = 'data:' . $imageMimeType . ';base64,' . $avatarBase64;
             $user->setAvatar($avatarImage);
             $isUpdated = true;
         }
@@ -127,7 +129,7 @@ class UserController extends AbstractController
             $this->entityManager->flush();
 
             // Enviar correo electrónico
-            $this->sendEmail($user->getEmail());
+            $this->sendEmail($email, $username, $avatarImage);
 
             // Devolver una respuesta JSON indicando que los datos se han actualizado
             return new JsonResponse(['message' => 'User data updated successfully'], Response::HTTP_OK);
@@ -303,13 +305,19 @@ class UserController extends AbstractController
         return new JsonResponse($formattedCategories, JsonResponse::HTTP_OK);
     }
 
-    private function sendEmail(string $emailAddress): void
+    private function sendEmail(string $emailAddress, string $username, string $avatarImage): void
     {
         $email = (new Email())
             ->from('brickpoint.daw@gmail.com')
             ->to($emailAddress)
-            ->subject('User Info updated successfully!')
-            ->text('Your data has been successfully updated');
+            ->subject('Actualización de Perfil')
+            ->html($this->renderView('email/update.html.twig', [
+                'title' => 'Actualización de Perfil',
+                'message' => 'This is a test email sent from Symfony Mailer using Gmail.',
+                'username' => $username,
+                'userAvatar' => $avatarImage
+            ]));
+
         $this->mailerInterface->send($email);
     }
 }

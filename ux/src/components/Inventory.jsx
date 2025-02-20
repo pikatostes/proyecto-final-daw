@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { Card, Button, Row, Col, Modal } from "react-bootstrap";
+import { Card, Button, Row, Col, Modal, Container } from "react-bootstrap";
 import ColorCarousel from "./ColorCarousel";
 import PieceOptions from "./PieceOptions";
 import { CartPlus } from "react-bootstrap-icons";
 import ThreePointsButton from "./ThreePointsButton";
 import { deletePiece } from "./pieceUtils";
 import PieceForm from "../components/admin/piece/PieceForm";
+import PieceDetailsAccordion from "./PieceDetailsAccordion";
 
 const Inventory = ({ pieces }) => {
   const [selectedPieceData, setSelectedPieceData] = useState(null);
   const [showPieceFormModal, setShowPieceFormModal] = useState(false);
   const [showPieceOptionsModal, setShowPieceOptionsModal] = useState(false);
+  const [showPieceEditModal, setShowPieceEditModal] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
 
   const handleAddToCart = (pieceData) => {
@@ -19,7 +21,8 @@ const Inventory = ({ pieces }) => {
   };
 
   const handleEditPiece = (pieceData) => {
-    console.log("editing piece:", pieceData);
+    setSelectedPieceData(pieceData);
+    setShowPieceEditModal(true);
   };
 
   const handleDeletePiece = (pieceData) => {
@@ -41,11 +44,11 @@ const Inventory = ({ pieces }) => {
   }
 
   return (
-    <div style={{ position: "relative" }}>
+    <Container style={{ position: "relative" }} fluid className="vh-100">
       <Row>
         {pieces.map((piece) => (
           <Col key={piece.id} xs={6} sm={6} md={3} lg={2} className="mb-4">
-            <Card style={{ minHeight: "" }}>
+            <Card>
               <Row>
                 <Col xs={12} md={12}>
                   <ColorCarousel colors={piece.colors} />
@@ -113,13 +116,35 @@ const Inventory = ({ pieces }) => {
         </Modal.Footer>
       </Modal>
 
+      <Modal
+        show={showPieceEditModal}
+        onHide={() => setShowPieceEditModal(false)}
+        size="xl"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Piece</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <PieceDetailsAccordion piece={selectedPieceData} onSave={() => setShowPieceEditModal(false)} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowPieceEditModal(false)}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       {showPieceOptionsModal && selectedPieceData && (
         <PieceOptions
           pieceData={selectedPieceData}
           onClose={handleClosePieceOptions}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

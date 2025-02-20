@@ -2,10 +2,7 @@ export const updateUser = async (formData) => {
   try {
     const response = await fetch(import.meta.env.VITE_API_URL + "/admin/user/edit", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
+      body: formData,
     });
 
     if (!response.ok) {
@@ -19,13 +16,20 @@ export const updateUser = async (formData) => {
 
 export const deleteUser = async (userId) => {
   try {
+<<<<<<< HEAD
     const data = { id: userId };
     const response = await fetch(import.meta.env.VITE_API_URL + "/admin/user/delete", {
       method: "DELETE",
+=======
+    const formData = new FormData();
+    formData.append("id", userId);
+    const response = await fetch("http://localhost:8000/admin/user/delete", {
+      method: "POST",
+>>>>>>> 8829acdc65f948c75a6fbfd5366b86948bb9b779
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: formData,
     });
 
     if (!response.ok) {

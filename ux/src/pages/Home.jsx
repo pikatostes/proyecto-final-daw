@@ -1,11 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Image,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import CarouselComponent from "../components/Carousel";
-import { Card, Col, Container, Image, Nav, Row } from "react-bootstrap";
 import Minifigures from "../assets/minifigures.webp";
 import LegoIcon from "../assets/lego-icon.webp";
+import { BagFill, People, PeopleFill } from "react-bootstrap-icons";
 
 const Home = () => {
+<<<<<<< HEAD
   console.log(localStorage.getItem("token"));
+=======
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/post/most-liked"); // Cambia esta URL por la correcta
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+>>>>>>> 8829acdc65f948c75a6fbfd5366b86948bb9b779
   return (
     <Container
       fluid
@@ -13,51 +48,67 @@ const Home = () => {
       style={{ minHeight: "100vh" }}
       data-bs-theme="dark"
     >
-      <h2>Welcome to BrickPoint!</h2>
-      <h3>
-        Your <Image src={LegoIcon} alt="Lego Icon" rounded height={35} /> pieces
-        shop and forum
-      </h3>
       {/* <CarouselComponent carouselSize="carousel-md" imageSizes={imageSizes} /> */}
       <Row className="align-items-center">
         <Col xs={12}>
+          <h2>Welcome to BrickPoint!</h2>
+          <h3>
+            Your <Image src={LegoIcon} alt="Lego Icon" rounded height={35} />{" "}
+            pieces shop and forum
+          </h3>
+        </Col>
+        <Col xs={12} md={6}>
           <Image src={Minifigures} alt="Minifigures" fluid />
         </Col>
+        <Col xs={12} md={6}>
+          <Row className="align-items-center justify-content-center w-100 mt-4 mb-4">
+            <Col xs={12}>
+              <h3>Start exploring our website!</h3>
+            </Col>
+            <Col xs={6}>
+              <Button variant="primary" size="lg" href="/pieces">
+                <BagFill /> Shop
+              </Button>
+            </Col>
+            <Col xs={6}>
+              <Button variant="primary" size="lg" href="/post">
+                <PeopleFill /> Forum
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      <Row className="align-items-center">
         <Col xs={12}>
           <h3>Best Creations</h3>
-          <Card>
-            <Card.Header>
-              <Nav variant="pills" className="justify-content-center" justify>
-                <Nav.Item>
-                  <Nav.Link eventKey="first">Card Title</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="second">Card Title</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="third">Card Title</Nav.Link>
-                </Nav.Item>
-              </Nav>
-            </Card.Header>
-            <Card.Body>
-              <Row className="align-items-center">
-                <Col xs={12}>
-                  <Image
-                    src="https://via.placeholder.com/300x300"
-                    alt="Placeholder Image"
-                    fluid
-                  />
+          {loading ? (
+            <Spinner animation="border" variant="light" />
+          ) : error ? (
+            <p>Error: {error}</p>
+          ) : (
+            <Row>
+              {posts.map((post) => (
+                <Col xs={12} md={4} key={post.id}>
+                  <Card className="mb-3" data-bs-theme="dark">
+                    <Card.Body>
+                      <Row className="align-items-center">
+                        <Col xs={12} md={4}>
+                          <Image src={post.image} alt={post.title} fluid />
+                        </Col>
+                        <Col xs={12} md={8}>
+                          <h3>{post.title}</h3>
+                          <p>{post.description}</p>
+                          <p>
+                            <strong>{post.totalLikes} likes</strong>
+                          </p>
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
                 </Col>
-                <Col xs={12}>
-                  <h3>Card Title</h3>
-                  <p>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
+              ))}
+            </Row>
+          )}
         </Col>
       </Row>
     </Container>

@@ -1,5 +1,4 @@
 export const createColor = async (formData) => {
-    console.log(formData);
     try {
         const formDataToSend = new FormData();
         formDataToSend.append("name", formData.name);

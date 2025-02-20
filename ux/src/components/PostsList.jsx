@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Row, Col, Image, Spinner } from "react-bootstrap";
+import { Card, Button, Row, Col, Image, Spinner, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import PostDetail from "./PostDetail";
 import { fetchPosts, handleLike, handleDeletePost } from "./postUtils";
@@ -74,7 +74,7 @@ const PostsList = ({ apiUrl, category }) => {
     : posts;
 
   return (
-    <div>
+    <Container fluid>
       {category && <h2>Posts de {category}</h2>}
       {filteredPosts.map((post) => (
         <Card
@@ -144,7 +144,7 @@ const PostsList = ({ apiUrl, category }) => {
           setError={setError}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

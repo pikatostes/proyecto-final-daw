@@ -82,7 +82,7 @@ export const updatePost = async (postId, postData) => {
     }
   }
 
-  const response = await fetch(`${API_URL}/post/${postId}/update`, {
+  const response = await fetch(`${API_URL}/post/update/${postId}`, {
     method: "POST",
     body: formData,
   });
@@ -161,7 +161,6 @@ export const createPostCategory = async (categoryData) => {
 };
 
 export const updatePostCategory = async (category) => {
-  console.log(category)
   try {
     const formData = new FormData();
     formData.append("id", category.id);

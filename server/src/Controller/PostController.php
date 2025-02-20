@@ -130,7 +130,7 @@ class PostController extends AbstractController
         return new Response('Post created successfully', Response::HTTP_OK);
     }
 
-    #[Route('/update/{id}', name: 'update_post', methods: ['PATCH'])]
+    #[Route('/update/{id}', name: 'update_post')]
     public function updatePost(int $id, Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository): JsonResponse
     {
         // Encontrar el post correspondiente
@@ -174,7 +174,7 @@ class PostController extends AbstractController
         }
 
         if ($isUpdated) {
-            $post->setUpdatedAt(new \DateTime());
+            $post->setUpdatedAt(new DateTime());
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -308,22 +308,36 @@ class PostController extends AbstractController
         return new JsonResponse(['message' => 'Reporte registrado correctamente'], Response::HTTP_OK);
     }
 
-    #[Route('/most-liked', name: 'app_posts_most_liked', methods: ['GET'])]
-    public function getMostLikedPosts(): JsonResponse
+    #[Route('/most-liked', name: 'most_liked', methods: ['GET'])]
+    public function mostLiked(PostRepository $postRepository): JsonResponse
     {
-        $postRepository = $this->entityManager->getRepository(Post::class);
+        $posts = $postRepository->findAll();
 
-        // Obtener los posts con más likes
-        $query = $postRepository->createQueryBuilder('p')
-            ->select('p.id, p.title, p.description, COUNT(l.id) AS likes_count')
-            ->leftJoin('p.likes', 'l')
-            ->groupBy('p.id')
-            ->orderBy('likes_count', 'DESC')
-            ->setMaxResults(10) // Ajustar el número de posts que deseas obtener
-            ->getQuery();
+        // Serializar los datos de los posts a JSON
+        $postsData = [];
+        foreach ($posts as $post) {
+            $totalLikes = $post->getLikes()->count(); // Obtener el número total de likes
 
-        $mostLikedPosts = $query->getResult();
+            $postsData[] = [
+                'id' => $post->getId(),
+                'title' => $post->getTitle(),
+                'category' => $post->getCategory()->getName(), // Obtener el nombre de la categoría
+                'description' => $post->getDescription(),
+                'createdAt' => $post->getCreatedAt()->format('Y-m-d H:i:s'),
+                'updatedAt' => $post->getUpdatedAt()->format('Y-m-d H:i:s'),
+                'totalLikes' => $totalLikes,
+                'user' => $post->getUserId()->getUsername(),
+                'avatar' => $post->getUserId()->getAvatar(),
+                'image' => $post->getImage(),
+            ];
+        }
 
-        return new JsonResponse($mostLikedPosts);
+        // Ordenar los posts por total de likes en orden descendente
+        usort($postsData, function ($a, $b) {
+            return $b['totalLikes'] - $a['totalLikes'];
+        });
+
+        // Devolver la respuesta JSON con los datos de los posts
+        return new JsonResponse($postsData);
     }
 }

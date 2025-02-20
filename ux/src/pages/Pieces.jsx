@@ -1,26 +1,35 @@
 import React, { useState, useEffect } from "react";
 import Inventory from "../components/Inventory";
 import FilterSelector from "../components/FilterSelector";
-import { Col, Row, Button, Offcanvas } from "react-bootstrap";
+import { Col, Row, Button, Offcanvas, Spinner } from "react-bootstrap";
 
 const Pieces = () => {
   const [selectedColors, setSelectedColors] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
   const [pieces, setPieces] = useState([]);
+  const [loading, setLoading] = useState(true); // Estado para gestionar el indicador de carga
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 24;
 
   useEffect(() => {
     const fetchPieces = async () => {
       try {
+<<<<<<< HEAD
         const response = await fetch(import.meta.env.VITE_API_URL + "/piece/shop");
+=======
+        setLoading(true);
+        const response = await fetch("http://localhost:8000/piece/shop");
+>>>>>>> 8829acdc65f948c75a6fbfd5366b86948bb9b779
         if (!response.ok) {
           throw new Error("Failed to fetch pieces");
         }
         const data = await response.json();
-        console.log("Fetched pieces:", data);
         setPieces(data);
       } catch (error) {
         console.error("Error fetching pieces:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -29,14 +38,14 @@ const Pieces = () => {
 
   const handleColorFilterChange = (filters) => {
     const colors = filters.map(filter => filter.name);
-    console.log("Selected colors:", colors);
     setSelectedColors(colors);
+    setCurrentPage(1); // Reset page to 1 when filters change
   };
 
   const handleCategoryFilterChange = (filters) => {
     const categories = filters.map(filter => filter.name);
-    console.log("Selected categories:", categories);
     setSelectedCategories(categories);
+    setCurrentPage(1); // Reset page to 1 when filters change
   };
 
   const toggleFilters = () => {
@@ -46,16 +55,21 @@ const Pieces = () => {
   const filteredPieces = pieces.filter(piece => {
     const matchesColor = selectedColors.length === 0 || piece.colors.some(color => selectedColors.includes(color.name));
     const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(piece.category);
-    console.log(`Piece ${piece.name} matchesColor: ${matchesColor}, matchesCategory: ${matchesCategory}`);
     return matchesColor && matchesCategory;
   });
 
-  console.log("Filtered pieces:", filteredPieces);
+  const indexOfLastPiece = currentPage * itemsPerPage;
+  const indexOfFirstPiece = indexOfLastPiece - itemsPerPage;
+  const currentPieces = filteredPieces.slice(indexOfFirstPiece, indexOfLastPiece);
+  const totalPages = Math.ceil(filteredPieces.length / itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="container-fluid">
       <Row>
-        {/* Columna para filtros en tamaños grandes */}
         <Col lg={2} className="d-none d-md-block">
           <h2>Filters</h2>
           <FilterSelector
@@ -70,12 +84,10 @@ const Pieces = () => {
             title="Category"
           />
         </Col>
-        {/* Botón para mostrar filtros en tamaños pequeños */}
         <Col xs={12} className="d-md-none">
           <Button onClick={toggleFilters}>Show Filters</Button>
           <br />
         </Col>
-        {/* Offcanvas para filtros en tamaños pequeños */}
         <Offcanvas
           placement="start"
           show={showFilters}
@@ -99,9 +111,30 @@ const Pieces = () => {
             />
           </Offcanvas.Body>
         </Offcanvas>
-        {/* Columna para mostrar inventario */}
         <Col lg={10} xs={12} className="overflow-auto">
-          <Inventory pieces={filteredPieces} />
+          {loading ? (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: "80vh" }}>
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          ) : (
+            <>
+              <Inventory pieces={currentPieces} />
+              <div className="d-flex justify-content-center mt-3">
+                {[...Array(totalPages)].map((_, index) => (
+                  <Button
+                    key={index}
+                    variant={index + 1 === currentPage ? "primary" : "outline-primary"}
+                    onClick={() => handlePageChange(index + 1)}
+                    className="me-2"
+                  >
+                    {index + 1}
+                  </Button>
+                ))}
+              </div>
+            </>
+          )}
         </Col>
       </Row>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Nav, Row, Tab, Button, Modal } from "react-bootstrap";
 import UserList from "../components/admin/user/UserList";
 import PostReportsList from "../components/admin/reports/PostReportsList";
@@ -17,6 +17,24 @@ const Admin = () => {
   const [showPieceFormModal, setShowPieceFormModal] = useState(false);
   const [showColorFormModal, setShowColorFormModal] = useState(false); // Estado para el modal del formulario de color
   const [selectedPieceData, setSelectedPieceData] = useState(null);
+  const [pieces, setPieces] = useState([]);
+
+  useEffect(() => {
+    const fetchPieces = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/piece");
+        if (!response.ok) {
+          throw new Error("Failed to fetch pieces");
+        }
+        const data = await response.json();
+        setPieces(data);
+      } catch (error) {
+        console.error("Error fetching pieces:", error);
+      }
+    };
+
+    fetchPieces();
+  }, []);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
@@ -109,7 +127,11 @@ const Admin = () => {
               >
                 New Color
               </Button>
+<<<<<<< HEAD
               <Inventory apiUrl={import.meta.env.VITE_API_URL + "/piece"}/>
+=======
+              <Inventory pieces={pieces}/>
+>>>>>>> 8829acdc65f948c75a6fbfd5366b86948bb9b779
             </Tab.Pane>
           </Tab.Content>
         </Col>
@@ -124,7 +146,7 @@ const Admin = () => {
           <Modal.Title>Register New User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Register />
+          <Register admin={true}/>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseRegisterModal}>

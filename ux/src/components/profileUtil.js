@@ -17,7 +17,7 @@ export const updateUserDetails = async (userId, username, email, avatar) => {
     const formData = new FormData();
     formData.append("username", username);
     formData.append("email", email);
-    formData.append("avatar", avatar);
+    formData.append("avatar", `http://localhost:8000/images/${avatar}`);
 
     const response = await fetch(
       import.meta.env.VITE_API_URL + `/user/${userId}/update`,
