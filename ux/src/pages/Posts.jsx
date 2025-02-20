@@ -36,7 +36,7 @@ const Posts = () => {
         try {
           setLoading(true);
           const response = await fetch(
-            `http://localhost:8000/api/search?query=${searchQuery}`
+            import.meta.env.VITE_API_URL + `/api/search?query=${searchQuery}`
           );
           const data = await response.json();
           setSearchResults(data);
@@ -74,7 +74,7 @@ const Posts = () => {
       <Row>
         <Col xs={12} md={3}>
           <PostCategory
-            apiUrl={"http://localhost:8000/post/category"}
+            apiUrl={import.meta.env.VITE_API_URL + "/post/category"}
             onSelectCategory={handleSelectCategory}
           />
         </Col>
@@ -139,7 +139,7 @@ const Posts = () => {
             )}
           </Row>
           <PostsList
-            apiUrl="http://localhost:8000/post/"
+            apiUrl={import.meta.env.VITE_API_URL + "/post/"}
             category={selectedCategory}
           />
         </Col>

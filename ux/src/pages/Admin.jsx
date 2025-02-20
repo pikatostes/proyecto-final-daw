@@ -84,7 +84,7 @@ const Admin = () => {
                 Register New User
               </Button>
               <UserList
-                apiUrl={"http://localhost:8000/admin/user/list"}
+                apiUrl={import.meta.env.VITE_API_URL + "/admin/user/list"}
                 data-bs-theme="dark"
               />
             </Tab.Pane>
@@ -109,7 +109,7 @@ const Admin = () => {
               >
                 New Color
               </Button>
-              <Inventory apiUrl={"http://localhost:8000/piece"}/>
+              <Inventory apiUrl={import.meta.env.VITE_API_URL + "/piece"}/>
             </Tab.Pane>
           </Tab.Content>
         </Col>

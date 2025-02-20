@@ -1,6 +1,6 @@
 // apiUtils.js
 export const registerUser = async (formDataToSend) => {
-  const response = await fetch("http://localhost:8000/register", {
+  const response = await fetch(import.meta.env.VITE_API_URL + "/register", {
     method: "POST",
     body: formDataToSend,
   });
@@ -11,7 +11,7 @@ export const registerUser = async (formDataToSend) => {
 };
 
 export const loginUser = async (formData) => {
-  const response = await fetch("http://localhost:8000/api/login", {
+  const response = await fetch(import.meta.env.VITE_API_URL + "/api/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export const getUserData = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8000/user/${userId}`, {
+    const response = await fetch(import.meta.env.VITE_API_URL + `/user/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -90,7 +90,7 @@ export const getUserData = async () => {
 
 export const getImageNames = async () => {
   try {
-    const response = await fetch("http://localhost:8000/images");
+    const response = await fetch(import.meta.env.VITE_API_URL + "/images");
     if (!response.ok) {
       throw new Error("Failed to fetch image names");
     }
@@ -118,7 +118,7 @@ export const fetchUserDataUsingToken = () => {
 
   // Create a synchronous XMLHttpRequest to fetch user data
   const xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://localhost:8000/api/user", false); // 'false' makes the request synchronous
+  xhr.open("GET", import.meta.env.VITE_API_URL + "/api/user", false); // 'false' makes the request synchronous
   xhr.setRequestHeader("Authorization", `Bearer ${token}`);
   xhr.setRequestHeader("Content-Type", "application/json");
 

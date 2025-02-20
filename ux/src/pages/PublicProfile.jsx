@@ -32,7 +32,7 @@ const PublicProfile = () => {
     const fetchUserData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/user-data/${username}`
+          import.meta.env.VITE_API_URL + `/user-data/${username}`
         );
         if (!response.ok) {
           throw new Error("User not found");
@@ -82,7 +82,7 @@ const PublicProfile = () => {
                   <Row>
                     <Col xs={12} md={3}>
                       <PostCategory
-                        apiUrl={"http://localhost:8000/user/posts/categories"}
+                        apiUrl={import.meta.env.VITE_API_URL + "/user/posts/categories"}
                         userId={userData.id}
                         onSelectCategory={handleSelectCategory}
                       />
@@ -93,7 +93,7 @@ const PublicProfile = () => {
                       style={{ maxHeight: "77vh", overflowY: "auto" }}
                     >
                       <PostsList
-                        apiUrl={`http://localhost:8000/user/${userData.id}/posts`}
+                        apiUrl={import.meta.env.VITE_API_URL + `/user/${userData.id}/posts`}
                         category={selectedCategory}
                       />
                     </Col>
@@ -101,7 +101,7 @@ const PublicProfile = () => {
                 </Tab.Pane>
                 <Tab.Pane eventKey="likes" active={activeTab === "likes"}>
                   <PostsList
-                    apiUrl={`http://localhost:8000/user/${userData.id}/likes`}
+                    apiUrl={import.meta.env.VITE_API_URL + `/user/${userData.id}/likes`}
                   />
                 </Tab.Pane>
               </Tab.Content>

@@ -2,7 +2,7 @@ export const deleteCommentReport = async (commentReportId) => {
   try {
     const data = { id: commentReportId };
     const response = await fetch(
-      "http://localhost:8000/comment/report/delete",
+      import.meta.env.VITE_API_URL + "/comment/report/delete",
       {
         method: "DELETE",
         headers: {

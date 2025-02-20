@@ -7,7 +7,7 @@ const CommentReportsList = () => {
   const [commentReports, setCommentReports] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/comments/reports")
+    fetch(import.meta.env.VITE_API_URL + "/comments/reports")
       .then((response) => response.json())
       .then((data) => {
         setCommentReports(data);

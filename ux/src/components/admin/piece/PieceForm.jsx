@@ -30,13 +30,13 @@ const PieceForm = ({ piece = null, pieceDetail = false }) => {
   useEffect(() => {
     const fetchCategoriesAndColors = async () => {
       try {
-        const categoryResponse = await fetch("http://localhost:8000/category");
+        const categoryResponse = await fetch(import.meta.env.VITE_API_URL + "/category");
         if (!categoryResponse.ok) {
           throw new Error("Failed to fetch categories");
         }
         const categoryData = await categoryResponse.json();
 
-        const colorResponse = await fetch("http://localhost:8000/color");
+        const colorResponse = await fetch(import.meta.env.VITE_API_URL + "/color");
         if (!colorResponse.ok) {
           throw new Error("Failed to fetch colors");
         }

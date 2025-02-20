@@ -5,6 +5,7 @@ import Minifigures from "../assets/minifigures.webp";
 import LegoIcon from "../assets/lego-icon.webp";
 
 const Home = () => {
+  console.log(localStorage.getItem("token"));
   return (
     <Container
       fluid

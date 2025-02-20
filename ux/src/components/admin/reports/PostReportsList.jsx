@@ -5,7 +5,7 @@ const PostReportsList = () => {
   const [postReports, setPostReports] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/post/reports")
+    fetch(import.meta.env.VITE_API_URL + "/post/reports")
       .then((response) => response.json())
       .then((data) => setPostReports(data))
       .catch((error) => console.error("Error fetching data:", error));

@@ -25,7 +25,7 @@ const PostPage = () => {
           <Col>
             <Tab.Content>
               <Tab.Pane eventKey="post-list">
-                <PostsList apiUrl={"http://localhost:8000/admin/post/list"} />
+                <PostsList apiUrl={import.meta.env.VITE_API_URL + "/admin/post/list"} />
               </Tab.Pane>
               <Tab.Pane eventKey="post-reports">
                 <PostReportsList />

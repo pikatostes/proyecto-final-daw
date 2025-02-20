@@ -61,13 +61,13 @@ const ProfileV2 = () => {
           <Tab.Container id="post-tabs" defaultActiveKey="">
             <Row>
               <Col sm={2}>
-                <PostCategory apiUrl={"http://localhost:8000/user/posts/categories"} userId={user_id} onSelectCategory={handleSelectCategory}/>
+                <PostCategory apiUrl={import.meta.env.VITE_API_URL + "/user/posts/categories"} userId={user_id} onSelectCategory={handleSelectCategory}/>
               </Col>
               <Col sm={10}>
                 <Tab.Content>
                   <Tab.Pane eventKey={selectedCategory}>
                     <PostsList
-                      apiUrl={`http://localhost:8000/user/${user_id}/posts`}
+                      apiUrl={import.meta.env.VITE_API_URL + `/user/${user_id}/posts`}
                       category={selectedCategory}
                     />
                   </Tab.Pane>
@@ -77,7 +77,7 @@ const ProfileV2 = () => {
           </Tab.Container>
         </Tab>
         <Tab eventKey="likes" title="Likes">
-          <PostsList apiUrl={`http://localhost:8000/user/${user_id}/likes`} />
+          <PostsList apiUrl={import.meta.env.VITE_API_URL + `/user/${user_id}/likes`} />
         </Tab>
         <Tab eventKey="comments" title="Comments">
           <UserComments />

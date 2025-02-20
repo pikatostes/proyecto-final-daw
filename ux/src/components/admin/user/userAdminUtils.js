@@ -1,6 +1,6 @@
 export const updateUser = async (formData) => {
   try {
-    const response = await fetch("http://localhost:8000/admin/user/edit", {
+    const response = await fetch(import.meta.env.VITE_API_URL + "/admin/user/edit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +20,7 @@ export const updateUser = async (formData) => {
 export const deleteUser = async (userId) => {
   try {
     const data = { id: userId };
-    const response = await fetch("http://localhost:8000/admin/user/delete", {
+    const response = await fetch(import.meta.env.VITE_API_URL + "/admin/user/delete", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

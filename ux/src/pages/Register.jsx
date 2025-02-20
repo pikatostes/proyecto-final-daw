@@ -22,10 +22,10 @@ const Register = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    // Fetch images from localhost:8000
+    // Fetch images from 192.168.0.14:8000
     const fetchImages = async () => {
       try {
-        const response = await fetch("http://localhost:8000/images");
+        const response = await fetch(import.meta.env.VITE_API_URL + "/images");
         const data = await response.json();
         setImages(data);
       } catch (error) {
@@ -87,7 +87,7 @@ const Register = () => {
       if (formData.avatar instanceof File) {
         formDataToSend.append("avatar", formData.avatar);
       } else {
-        formDataToSend.append("avatarUrl", `http://localhost:8000/images/${formData.avatar}`);
+        formDataToSend.append("avatarUrl", import.meta.env.VITE_API_URL + `/images/${formData.avatar}`);
       }
 
       await registerUser(formDataToSend);
@@ -207,7 +207,7 @@ const Register = () => {
                       <div key={key} className="position-relative m-1">
                         <Image
                           roundedCircle
-                          src={`http://localhost:8000/images/${imageName}`}
+                          src={import.meta.env.VITE_API_URL + `/images/${imageName}`}
                           onClick={() => handleImageClick(imageName)}
                           style={{ cursor: "pointer", opacity: selectedImage === imageName ? 0.5 : 1 }}
                           width={63}
