@@ -3,7 +3,7 @@ export const createColor = async (formData) => {
     try {
         const formDataToSend = new FormData();
         formDataToSend.append("name", formData.name);
-        const response = await fetch("http://localhost:8000/color/new", {
+        const response = await fetch(import.meta.env.VITE_API_URL + "/color/new", {
             method: "POST",
             body: formDataToSend,
         });

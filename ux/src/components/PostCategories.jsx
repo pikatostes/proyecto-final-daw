@@ -22,7 +22,7 @@ const PostCategories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:8000/post/category");
+        const response = await fetch(import.meta.env.VITE_API_URL + "/post/category");
         if (!response.ok) {
           throw new Error("Error fetching categories");
         }

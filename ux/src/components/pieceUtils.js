@@ -3,7 +3,7 @@ export const newPiece = async (formData) => {
     console.log(`${key}: ${value}`);
   }
   try {
-    const response = await fetch("http://localhost:8000/piece/new", {
+    const response = await fetch(import.meta.env.VITE_API_URL + "/piece/new", {
       method: "POST",
       body: formData, // Cambiar formData a formDataToSend
     });
@@ -20,7 +20,7 @@ export const newPiece = async (formData) => {
 export const deletePiece = async (pieceId) => {
   console.log("received id:", pieceId);
   try {
-    const response = await fetch(`http://localhost:8000/piece/delete`, {
+    const response = await fetch(import.meta.env.VITE_API_URL + `/piece/delete`, {
       method: "POST", // Cambiado de DELETE a POST
       headers: {
         "Content-Type": "application/json", // Añadido el encabezado Content-Type
@@ -41,7 +41,7 @@ export const newPieceDetail = async (formData) => {
     console.log(`${key}: ${value}`);
   }
   try {
-    const response = await fetch("http://localhost:8000/piece/detail/new", {
+    const response = await fetch(import.meta.env.VITE_API_URL + "/piece/detail/new", {
       method: "POST",
       body: formData,
     });

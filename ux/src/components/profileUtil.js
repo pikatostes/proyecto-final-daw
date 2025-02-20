@@ -3,7 +3,7 @@ import { checkUserSession } from "../pages/userUtils";
 // apiUtils.js
 export const fetchUserData = async (userId) => {
   if (checkUserSession()) {
-    const response = await fetch(`http://localhost:8000/user/${userId}`);
+    const response = await fetch(import.meta.env.VITE_API_URL + `/user/${userId}`);
     if (!response.ok) {
       throw new Error("Error fetching user data");
     }
@@ -20,7 +20,7 @@ export const updateUserDetails = async (userId, username, email, avatar) => {
     formData.append("avatar", avatar);
 
     const response = await fetch(
-      `http://localhost:8000/user/${userId}/update`,
+      import.meta.env.VITE_API_URL + `/user/${userId}/update`,
       {
         method: "POST",
         body: formData,
@@ -39,7 +39,7 @@ export const updateUserDetails = async (userId, username, email, avatar) => {
 export const fetchUserBillingInfo = async (userId) => {
   if (checkUserSession()) {
     const response = await fetch(
-      `http://localhost:8000/user/${userId}/billingInfo`
+      import.meta.env.VITE_API_URL + `/user/${userId}/billingInfo`
     );
     if (!response.ok) {
       throw new Error("Error fetching user billing info");
@@ -68,7 +68,7 @@ export const createBillingInfo = async (
 
     try {
       const response = await fetch(
-        `http://localhost:8000/billingInfo/new`,
+        import.meta.env.VITE_API_URL + `/billingInfo/new`,
         {
           method: "POST",
           body: formData,

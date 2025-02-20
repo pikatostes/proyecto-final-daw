@@ -19,8 +19,13 @@ const PostComments = ({ post, comments, setComments }) => {
     }
   }, [comments, post.id, setComments]);
 
-  const handleDeleteComment = (commentId) => {
-    deleteComment(commentId, () => window.location.reload());
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await deleteComment(commentId);
+      fetchComments(post.id, setComments, setLoading); // Refrescar los comentarios después de eliminar
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
   };
 
   const handleEditComment = (comment) => {
