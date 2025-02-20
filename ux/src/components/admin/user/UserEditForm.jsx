@@ -15,10 +15,10 @@ const UserEditForm = ({ userData, onClose }) => {
   const [images, setImages] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:8000/images")
-      .then((response) => response.json())
-      .then((data) => setImages(data))
-      .catch((error) => console.error("Error fetching images:", error));
+    fetch(import.meta.env.VITE_API_URL + "/images")
+      .then(response => response.json())
+      .then(data => setImages(data))
+      .catch(error => console.error("Error fetching images:", error));
   }, []);
 
   const handleChange = (e) => {
@@ -36,9 +36,8 @@ const UserEditForm = ({ userData, onClose }) => {
 
   const handleImageClick = (imageName) => {
     setSelectedImage(imageName);
-    const imageUrl = `http://localhost:8000/images/${imageName}`;
-    setPreviewImage(imageUrl);
-    setFormData({ ...formData, avatar: imageUrl }); // Aquí asignamos la URL
+    setPreviewImage(import.meta.env.VITE_API_URL + `/images/${imageName}`);
+    setFormData({ ...formData, avatar: imageName });
   };
 
   const handleSubmit = (e) => {

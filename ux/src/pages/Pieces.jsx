@@ -15,8 +15,7 @@ const Pieces = () => {
   useEffect(() => {
     const fetchPieces = async () => {
       try {
-        setLoading(true);
-        const response = await fetch("http://localhost:8000/piece/shop");
+        const response = await fetch(import.meta.env.VITE_API_URL + "/piece/shop");
         if (!response.ok) {
           throw new Error("Failed to fetch pieces");
         }
@@ -69,13 +68,13 @@ const Pieces = () => {
         <Col lg={2} className="d-none d-md-block">
           <h2>Filters</h2>
           <FilterSelector
-            endpoint="http://localhost:8000/color/"
+            endpoint={import.meta.env.VITE_API_URL + "/color/"}
             onFilterChange={handleColorFilterChange}
             title="Color"
           />
           <br />
           <FilterSelector
-            endpoint="http://localhost:8000/category"
+            endpoint={import.meta.env.VITE_API_URL + "/category"}
             onFilterChange={handleCategoryFilterChange}
             title="Category"
           />
@@ -95,13 +94,13 @@ const Pieces = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <FilterSelector
-              endpoint="http://localhost:8000/color/"
+              endpoint={import.meta.env.VITE_API_URL + "/color/"}
               onFilterChange={handleColorFilterChange}
               title="Color"
             />
             <br />
             <FilterSelector
-              endpoint="http://localhost:8000/category"
+              endpoint={import.meta.env.VITE_API_URL + "/category"}
               onFilterChange={handleCategoryFilterChange}
               title="Category"
             />

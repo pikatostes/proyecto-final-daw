@@ -16,7 +16,6 @@ import { sendComment } from "./commentUtils"; // Importar la función sendCommen
 const PostDetail = ({ post, onClose }) => {
   const [comment, setComment] = useState(""); // Inicializamos el estado de comentario como una cadena vacía
   const [comments, setComments] = useState([]); // Estado para los comentarios
-  const userData = localStorage.getItem("userData");
   const handleChange = (e) => {
     setComment(e.target.value); // Actualizamos el estado del comentario con el valor del textarea
   };
@@ -40,7 +39,7 @@ const PostDetail = ({ post, onClose }) => {
 
   const fetchComments = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:8000/comment/${postId}`);
+      const response = await fetch(import.meta.env.VITE_API_URL + `/comment/${postId}`);
       if (!response.ok) {
         throw new Error("Error fetching comments");
       }
