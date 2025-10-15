@@ -1,6 +1,9 @@
+// pieceUtils.js
+const API_URL = process.env.VITE_API_URL;
+
 export const newPiece = async (formData) => {
   try {
-    const response = await fetch("http://localhost:8000/piece/new", {
+    const response = await fetch(API_URL + "/piece/new", {
       method: "POST",
       body: formData, // Cambiar formData a formDataToSend
     });
@@ -16,7 +19,7 @@ export const newPiece = async (formData) => {
 
 export const deletePiece = async (pieceId) => {
   try {
-    const response = await fetch(`http://localhost:8000/piece/delete`, {
+    const response = await fetch(API_URL + `/piece/delete`, {
       method: "POST", // Cambiado de DELETE a POST
       headers: {
         "Content-Type": "application/json", // Añadido el encabezado Content-Type
@@ -34,7 +37,7 @@ export const deletePiece = async (pieceId) => {
 
 export const newPieceDetail = async (formData) => {
   try {
-    const response = await fetch("http://localhost:8000/piece/detail/new", {
+    const response = await fetch(API_URL + "/piece/detail/new", {
       method: "POST",
       body: formData,
     });

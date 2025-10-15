@@ -18,11 +18,12 @@ const PostCategories = () => {
   const [error, setError] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
   const [showNewCategoryForm, setShowNewCategoryForm] = useState(false); // Nuevo estado
+  const API_URL = process.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:8000/post/category");
+        const response = await fetch(API_URL + "/post/category");
         if (!response.ok) {
           throw new Error("Error fetching categories");
         }

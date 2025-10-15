@@ -12,7 +12,7 @@ const AvatarGallery = ({ images, selectedImage, handleImageClick }) => {
           <div key={key} className="position-relative m-1">
             <Image
               roundedCircle
-              src={`http://localhost:8000/images/${imageName}`}
+              src={import.meta.env.VITE_API_URL + `/images/${imageName}`}
               onClick={() => handleImageClick(imageName)}
               style={{ cursor: "pointer", opacity: selectedImage === imageName ? 0.5 : 1 }}
               width={63}

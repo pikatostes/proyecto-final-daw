@@ -13,6 +13,7 @@ const PieceDetailsAccordion = ({ piece }) => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editableColors, setEditableColors] = useState(piece.colors);
   const [originalColors, setOriginalColors] = useState(piece.colors);
+  const API_URL = process.env.VITE_API_URL;
 
   const handleEditClick = (index) => {
     setOriginalColors(editableColors); // Save the original colors before editing
@@ -25,7 +26,7 @@ const PieceDetailsAccordion = ({ piece }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/piece/detail/delete",
+        API_URL + "/piece/detail/delete",
         {
           method: "POST",
           body: formdata,
@@ -61,7 +62,7 @@ const PieceDetailsAccordion = ({ piece }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/piece/detail/update",
+        API_URL + "/piece/detail/update",
         {
           method: "POST",
           body: formData,

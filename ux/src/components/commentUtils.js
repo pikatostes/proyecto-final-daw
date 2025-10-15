@@ -1,8 +1,9 @@
 // commentUtils.js
+const API_URL = process.env.VITE_API_URL;
 
 export const fetchComments = async (postId, setComments, setLoading) => {
   try {
-    const response = await fetch(`http://localhost:8000/comment/${postId}`);
+    const response = await fetch(API_URL + `/comment/${postId}`);
     if (!response.ok) {
       throw new Error("Error al obtener los comentarios");
     }
@@ -17,7 +18,7 @@ export const fetchComments = async (postId, setComments, setLoading) => {
 
 export const sendComment = async (postData) => {
   try {
-    const response = await fetch("http://localhost:8000/comment", {
+    const response = await fetch(API_URL + "/comment", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +37,7 @@ export const sendComment = async (postData) => {
 
 export const deleteComment = async (commentId, reloadPage) => {
   try {
-    const response = await fetch(`http://localhost:8000/comment/delete`, {
+    const response = await fetch(API_URL + `/comment/delete`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +57,7 @@ export const deleteComment = async (commentId, reloadPage) => {
 
 export const fetchUserComments = async (userSession, setUserComments, setLoading, setError) => {
   try {
-    const response = await fetch(`http://localhost:8000/user/${userSession}/comments`);
+    const response = await fetch(API_URL + `/user/${userSession}/comments`);
     if (!response.ok) {
       throw new Error("Error al obtener los comentarios");
     }
@@ -72,7 +73,7 @@ export const fetchUserComments = async (userSession, setUserComments, setLoading
 
 export const handleDeleteComment = async (commentId, userComments, setUserComments, setError) => {
   try {
-    const response = await fetch(`http://localhost:8000/comment/delete`, {
+    const response = await fetch(API_URL + `/comment/delete`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -91,7 +92,7 @@ export const handleDeleteComment = async (commentId, userComments, setUserCommen
 
 export const editComment = async (commentId, newText) => {
   try {
-    const response = await fetch(`http://localhost:8000/comment/edit`, {
+    const response = await fetch(API_URL + `/comment/edit`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,7 +110,7 @@ export const editComment = async (commentId, newText) => {
 
 export const reportComment = async (commentId, userId, description, setError) => {
   try {
-    const response = await fetch(`http://localhost:8000/report/comment`, {
+    const response = await fetch(API_URL + `/report/comment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
